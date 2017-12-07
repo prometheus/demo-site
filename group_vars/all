@@ -1,0 +1,37 @@
+#node_exporter_web_listen_address: "127.0.0.1:9100"
+prometheus_web_external_url: "http://{{ ansible_host }}:9090"
+prometheus_alertmanager_config:
+  - scheme: http
+    path_prefix: /alertmanager
+    static_configs:
+      - targets: ["127.0.0.1:9090"]
+
+prometheus_targets:
+- targets:
+  - localhost:9100
+  labels:
+    env: demo
+    job: node
+
+alertmanager_external_url: "http://{{ ansible_host }}:9093"
+alertmanager_slack_api_url: "http://example.org"
+
+grafana_auth: true
+grafana_admin_password: "cloudalchemy"
+
+grafana_datasources:
+  - name: "Prometheus"
+    type: "prometheus"
+    access: "proxy"
+    url: "http://localhost:9090"
+    isDefault: true
+grafana_dashboards:
+  - dashboard_id: '1860'
+    revision_id: '8'
+    datasource: 'Prometheus'
+  - dashboard_id: '1559'
+    revision_id: '2'
+    datasource: 'Prometheus'
+  - dashboard_id: '3662'
+    revision_id: '2'
+    datasource: 'Prometheus'

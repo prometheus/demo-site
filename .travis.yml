@@ -1,0 +1,20 @@
+sudo: required
+language: python
+cache: pip
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y golang 
+install:
+  - pip install ansible
+script:
+  - ansible-galaxy install -r roles/requirements.yml
+  - ansible-playbook --syntax-check site.yml
+    #deploy:
+    #  provider: script
+    #  skip_cleanup: true
+    #  script: ansible-playbook site.yml
+    #  on:
+    #    branch: master
+branches:
+  only:
+    - master
