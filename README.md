@@ -1,5 +1,5 @@
-Monitoring demo site: demo.cloudalchemy.org
-===========================================
+Cloud Alchemy demo monitoring site
+==================================
 
 [![Build Status](https://travis-ci.org/cloudalchemy/demo-site.svg?branch=master)](https://travis-ci.org/cloudalchemy/demo-site) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
