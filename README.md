@@ -11,6 +11,8 @@ Site is provisioned with ansible running in travis pipeline which is run everyda
 
 Have a look at the configuration file [group_vars/all](group_vars/all).
 
+**We are looking for hosting. Please contact @paulfantom if you can arrange VM with 1 vCPU and 512MB of RAM.**
+
 Applications
 ------------
 
