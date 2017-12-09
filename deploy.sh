@@ -1,4 +1,7 @@
 #!/bin/bash
+
+export ANSIBLE_FORCE_COLOR=true
+
 echo "Creating Vault-file: /tmp/vault"
 /bin/cat <<EOM >/tmp/vault
 ${ANSIBLE_VAULT_PASSWORD}
