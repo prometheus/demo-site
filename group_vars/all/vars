@@ -17,7 +17,7 @@ alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
 
 grafana_auth: true
-grafana_admin_password: "cloudalchemy"
+grafana_admin_password: "{{ vault_grafana_password }}"
 
 grafana_datasources:
   - name: "Prometheus"

@@ -9,12 +9,12 @@ install:
 script:
   - ansible-galaxy install -r roles/requirements.yml
   - ansible-playbook --syntax-check site.yml
-    #deploy:
-    #  provider: script
-    #  skip_cleanup: true
-    #  script: ansible-playbook site.yml
-    #  on:
-    #    branch: master
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./deploy.sh
+  on:
+    branch: master
 branches:
   only:
     - master
