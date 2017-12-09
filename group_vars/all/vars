@@ -18,6 +18,7 @@ alertmanager_slack_api_url: "http://example.org"
 
 grafana_auth: true
 grafana_admin_password: "{{ vault_grafana_password }}"
+grafana_password: "{{ grafana_admin_password }}"
 
 grafana_datasources:
   - name: "Prometheus"
