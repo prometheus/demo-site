@@ -20,9 +20,9 @@ All applications should be running on their default ports.
 
 | App name          | Address                                                         | Status |
 |-------------------|-----------------------------------------------------------------|--------|
-| node_exporter     | [demo.cloudalchemy.org:9100/metrics](http://demo.cloudalchemy.org:9100/metrics) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739001-48f8ed6c3aa6f23da1ec11e2.svg)](http://demo.cloudalchemy.org:9100/metrics) |
-| snmp_exporter     | [demo.cloudalchemy.org:9116/metrics](http://demo.cloudalchemy.org:9116/metrics) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739006-f784bd36e07d328bfacb6d17.svg)](http://demo.cloudalchemy.org:9116/metrics) |
-| blackbox_exporter | [demo.cloudalchemy.org:9115/metrics](http://demo.cloudalchemy.org:9115/metrics) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739004-8447f4012a129e08df4db247.svg)](http://demo.cloudalchemy.org:9115/metrics) |
+| node_exporter     | [demo.cloudalchemy.org:9100/metrics](http://demo.cloudalchemy.org:9100) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739001-48f8ed6c3aa6f23da1ec11e2.svg)](http://demo.cloudalchemy.org:9100) |
+| snmp_exporter     | [demo.cloudalchemy.org:9116/metrics](http://demo.cloudalchemy.org:9116) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739006-f784bd36e07d328bfacb6d17.svg)](http://demo.cloudalchemy.org:9116) |
+| blackbox_exporter | [demo.cloudalchemy.org:9115/metrics](http://demo.cloudalchemy.org:9115) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739004-8447f4012a129e08df4db247.svg)](http://demo.cloudalchemy.org:9115) |
 | prometheus        | [demo.cloudalchemy.org:9090](http://demo.cloudalchemy.org:9090) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739002-6049a4d9177bdf92d7dce7d9.svg)](http://demo.cloudalchemy.org:9190) |
 | alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) |
 | grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) |
