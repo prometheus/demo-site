@@ -1,4 +1,6 @@
 - name: cloudalchemy.node-exporter
+- name: cloudalchemy.snmp-exporter
+- name: cloudalchemy.blackbox-exporter
 - name: cloudalchemy.prometheus
 - name: cloudalchemy.alertmanager
 - name: cloudalchemy.grafana

@@ -16,10 +16,12 @@ Applications
 
 All applications should be running on their default ports.
 
-| App name      | Address                                                         |
-|---------------|-----------------------------------------------------------------|
-| node_exporter | [demo.cloudalchemy.org:9100](http://demo.cloudalchemy.org:9100) |
-| prometheus    | [demo.cloudalchemy.org:9090](http://demo.cloudalchemy.org:9090) |
-| alertmanager  | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) |
-| grafana       | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) |
+| App name          | Address                                                         |
+|-------------------|-----------------------------------------------------------------|
+| node_exporter     | [demo.cloudalchemy.org:9100](http://demo.cloudalchemy.org:9100) |
+| snmp_exporter     | [demo.cloudalchemy.org:9116](http://demo.cloudalchemy.org:9116) |
+| blackbox_exporter | [demo.cloudalchemy.org:9115](http://demo.cloudalchemy.org:9115) |
+| prometheus        | [demo.cloudalchemy.org:9090](http://demo.cloudalchemy.org:9090) |
+| alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) |
+| grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) |
 
