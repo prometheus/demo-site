@@ -9,4 +9,4 @@ EXIT_CODE=$?
 
 shred /tmp/vault
 
-exit $?
+exit $EXIT_CODE
