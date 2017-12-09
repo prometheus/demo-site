@@ -7,7 +7,7 @@ demo.cloudalchemy.org
 ---------------------
 
 This repository provides an integration testing suite for our ansible roles as well as demo site for grafana, prometheus, alertmanager and node_exporter (possibly more in the future).
-Site is provisioned with ansible running in travis pipeline which is run everyday and on every commit to master branch. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/cloudalchemy/demo-site).
+Site is provisioned with ansible running vvry week and on commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/cloudalchemy/demo-site).
 
 Have a look at the configuration file [group_vars/all/vars](group_vars/all/vars).
 
