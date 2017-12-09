@@ -5,5 +5,8 @@ ${ANSIBLE_VAULT_PASSWORD}
 EOM
 
 ansible-playbook --vault-id /tmp/vault site.yml
+EXIT_CODE=$?
 
 shred /tmp/vault
+
+exit $?
