@@ -3,7 +3,7 @@ language: python
 cache: pip
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y golang 
+  - sudo apt-get install -y golang sshpass
 install:
   - pip install ansible
 script:
