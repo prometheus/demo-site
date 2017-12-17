@@ -2,9 +2,8 @@
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_alertmanager_config:
   - scheme: http
-    path_prefix: /alertmanager
     static_configs:
-      - targets: ["127.0.0.1:9090"]
+      - targets: ["127.0.0.1:9093"]
 
 prometheus_targets:
 - targets:
@@ -12,6 +11,11 @@ prometheus_targets:
   labels:
     env: demo
     job: node
+- targets:
+  - localhost:9093
+  labels:
+    env: demo
+    job: alertmanager
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
