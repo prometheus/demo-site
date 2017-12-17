@@ -17,6 +17,22 @@ prometheus_targets:
     env: demo
     job: alertmanager
 
+prometheus_scrape_jobs:
+- job_name: 'blackbox'
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  static_configs:
+    - targets:
+      - http://demo.cloudalchemy.org:9100
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 127.0.0.1:9115  # Blackbox exporter.
+
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
 
