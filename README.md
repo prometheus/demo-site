@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/cloudalchemy/demo-site.svg?branch=master)](https://travis-ci.org/cloudalchemy/demo-site) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-## [demo.cloudalchemy.org](http://demo.cloudalchemy.org:3000)
+## [demo.cloudalchemy.org](http://demo.cloudalchemy.org:3000/dashboard/db/node-exporter-full?refresh=1m&orgId=1)
 
 This repository provides an integration testing suite for our ansible roles as well as demo site for grafana, prometheus, alertmanager and node_exporter (possibly more in the future).
 Site is provisioned with ansible running every week and on almost all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/cloudalchemy/demo-site).
