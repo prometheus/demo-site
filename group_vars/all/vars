@@ -7,15 +7,20 @@ prometheus_alertmanager_config:
 
 prometheus_targets:
 - targets:
-  - localhost:9100
+  - demo.cloudalchemy.org:9100
   labels:
     env: demo
     job: node
 - targets:
-  - localhost:9093
+  - demo.cloudalchemy.org:9093
   labels:
     env: demo
     job: alertmanager
+- targets:
+  - demo.cloudalchemy.org:3000
+  labels:
+    env: demo
+    job: grafana
 
 prometheus_scrape_jobs:
 - job_name: 'blackbox'
