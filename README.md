@@ -9,8 +9,6 @@ Site is provisioned with ansible running every week and on almost all commits to
 
 Have a look at the configuration file [group_vars/all/vars](group_vars/all/vars).
 
-**We are looking for hosting. Please contact [@paulfantom](https://github.com/paulfantom) if you can arrange VM with 1 vCPU and 512MB of RAM.**
-
 ## Applications
 
 All applications should be running on their default ports.
@@ -24,3 +22,6 @@ All applications should be running on their default ports.
 | alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) |
 | grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) |
 
+# 
+
+[![DigitalOcean](https://www.digitalocean.com/assets/media/logos-badges/png/DO_Powered_by_Badge_blue-fe4c6688.png)](https://digitalocean.com)
