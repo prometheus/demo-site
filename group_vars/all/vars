@@ -23,6 +23,15 @@ prometheus_targets:
     job: grafana
 
 prometheus_scrape_jobs:
+- job_name: "prometheus"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:9090"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/targets.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
