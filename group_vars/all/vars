@@ -22,7 +22,7 @@ prometheus_targets:
     env: demo
     job: grafana
 
-prometheus_scrape_jobs:
+prometheus_scrape_configs:
 - job_name: "prometheus"
   metrics_path: "/metrics"
   static_configs:
