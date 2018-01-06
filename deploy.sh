@@ -7,7 +7,7 @@ echo "Creating Vault-file: /tmp/vault"
 ${ANSIBLE_VAULT_PASSWORD}
 EOM
 
-ansible-playbook --vault-id /tmp/vault site.yml
+ansible-playbook --vault-id /tmp/vault site.yml extras.yml
 EXIT_CODE=$?
 
 shred /tmp/vault
