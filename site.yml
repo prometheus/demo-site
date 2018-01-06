@@ -24,3 +24,6 @@
     - cloudalchemy.grafana
   tags:
     - grafana
+
+# Additional software
+- include: additional.yml
