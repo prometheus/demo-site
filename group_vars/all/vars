@@ -3,26 +3,27 @@ prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_alertmanager_config:
   - scheme: http
     static_configs:
-      - targets: ["127.0.0.1:9093"]
+      - targets: 
+        - "{{ ansible_host }}:9093"
 
 prometheus_targets:
 - targets:
-  - demo.cloudalchemy.org:9100
+  - "{{ ansible_host }}:9100"
   labels:
     env: demo
     job: node
 - targets:
-  - demo.cloudalchemy.org:9093
+  - "{{ ansible_host }}:9093"
   labels:
     env: demo
     job: alertmanager
 - targets:
-  - demo.cloudalchemy.org:3000
+  - "{{ ansible_host }}:3000"
   labels:
     env: demo
     job: grafana
 - targets:
-  - demo.cloudalchemy.org:8080
+  - "{{ ansible_host }}:8080"
   labels:
     env: demo
     job: docker
@@ -43,7 +44,7 @@ prometheus_scrape_configs:
     module: [http_2xx]
   static_configs:
     - targets:
-      - http://demo.cloudalchemy.org:9100
+      - "http://{{ ansible_host }}:9100"
   relabel_configs:
     - source_labels: [__address__]
       target_label: __param_target
@@ -68,7 +69,7 @@ grafana_datasources:
   - name: "Prometheus"
     type: "prometheus"
     access: "proxy"
-    url: "http://localhost:9090"
+    url: "http://{{ ansible_host }}:9090"
     isDefault: true
 grafana_dashboards:
   - dashboard_id: '1860'
