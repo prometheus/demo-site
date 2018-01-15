@@ -5,7 +5,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y golang sshpass
 install:
-  - pip install ansible
+  - pip install ansible jmespath
 script:
   - ansible-galaxy install -r roles/requirements.yml
   - ansible-playbook --syntax-check site.yml
