@@ -7,26 +7,26 @@ prometheus_alertmanager_config:
         - "{{ ansible_host }}:9093"
 
 prometheus_targets:
-- targets:
-  - "{{ ansible_host }}:9100"
-  labels:
-    env: demo
-    job: node
-- targets:
-  - "{{ ansible_host }}:9093"
-  labels:
-    env: demo
-    job: alertmanager
-- targets:
-  - "{{ ansible_host }}:3000"
-  labels:
-    env: demo
-    job: grafana
-- targets:
-  - "{{ ansible_host }}:8080"
-  labels:
-    env: demo
-    job: docker
+  node:
+    - targets:
+      - "{{ ansible_host }}:9100"
+      labels:
+        env: demo
+  alertmanager:
+    - targets:
+      - "{{ ansible_host }}:9093"
+      labels:
+        env: demo
+  grafana:
+    - targets:
+      - "{{ ansible_host }}:3000"
+      labels:
+        env: demo
+  docker:
+    - targets:
+      - "{{ ansible_host }}:8080"
+      labels:
+        env: demo
 
 prometheus_scrape_configs:
 - job_name: "prometheus"
@@ -37,7 +37,19 @@ prometheus_scrape_configs:
 - job_name: "node"
   file_sd_configs:
   - files:
-    - "/etc/prometheus/file_sd/targets.yml"
+    - "/etc/prometheus/file_sd/node.yml"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/alertmanager.yml"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/grafana.yml"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/docker.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
