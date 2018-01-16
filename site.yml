@@ -1,10 +1,4 @@
 - hosts: all
-  gather_facts: no
-  tasks:
-  - name: Install python
-    raw: "apt update && apt install -y python"
-
-- hosts: all
   roles:
     - cloudalchemy.node-exporter
   tags:
