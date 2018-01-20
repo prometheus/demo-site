@@ -25,6 +25,7 @@
     caddy_features: http.prometheus
     caddy_config: |
       "{{ ansible_host }}"
+      prometheus
       tls paulfantom@gmail.com
       ext .html
       root /var/www
