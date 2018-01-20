@@ -22,6 +22,7 @@
       dest: /var/www/index.html
   vars:
     caddy_systemd_capabilities_enabled: True
+    caddy_features: http.prometheus
     caddy_config: |
       "{{ ansible_host }}"
       tls paulfantom@gmail.com

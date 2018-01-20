@@ -34,6 +34,11 @@ prometheus_scrape_configs:
   static_configs:
   - targets:
     - "{{ ansible_host }}:9090"
+- job_name: "caddy"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "localhost:9180"
 - job_name: "node"
   file_sd_configs:
   - files:
