@@ -7,3 +7,24 @@
 - hosts: all
   roles:
   - SoInteractive.docker
+
+- hosts: web
+  roles:
+  - antoiner77.caddy
+  pre_tasks:
+  - name: Ensure webdir exists
+    file:
+      path: /var/www
+      state: directory
+  - name: Ensure portal site exists
+    copy:
+      src: index.html
+      dest: /var/www/index.html
+  vars:
+    caddy_systemd_capabilities_enabled: True
+    caddy_config: |
+      "{{ ansible_host }}"
+      tls paulfantom@gmail.com
+      ext .html
+      root /var/www
+
