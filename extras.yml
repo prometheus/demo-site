@@ -12,14 +12,21 @@
   roles:
   - antoiner77.caddy
   pre_tasks:
-  - name: Ensure webdir exists
+  - name: Ensure webdirs exists
     file:
-      path: /var/www
+      path: /var/www/img
       state: directory
   - name: Ensure portal site exists
     copy:
       src: index.html
       dest: /var/www/index.html
+  - name: Copy images
+    copy:
+      src: "{{ item }}"
+      dest: "/var/www/img/{{ item }}"
+    with_items:
+    - logo.png
+    - digitalocean.png
   vars:
     caddy_systemd_capabilities_enabled: True
     caddy_features: http.prometheus
