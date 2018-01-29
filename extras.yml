@@ -20,13 +20,13 @@
     copy:
       src: index.html
       dest: /var/www/index.html
-      #  - name: Copy images
-      #    copy:
-      #      src: "{{ item }}"
-      #      dest: "/var/www/img/{{ item }}"
-      #    with_items:
-      #    - logo.png
-      #    - digitalocean.png
+  - name: Copy images
+    copy:
+      src: "{{ item }}"
+      dest: "/var/www/img/{{ item }}"
+    with_items:
+    - logo.png
+    - digitalocean.png
   vars:
     caddy_systemd_capabilities_enabled: True
     caddy_features: http.prometheus
