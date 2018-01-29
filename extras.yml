@@ -22,7 +22,7 @@
       dest: /var/www/index.html
   - name: Copy images
     copy:
-      src: "{{ item }}"
+      src: "img/{{ item }}"
       dest: "/var/www/img/{{ item }}"
     with_items:
     - logo.png
