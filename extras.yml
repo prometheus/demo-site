@@ -8,6 +8,25 @@
   roles:
   - SoInteractive.docker
 
+- hosts: influxdb
+  tasks:
+  - name: Start infludb container
+    command: docker run -d --name influx -p 8086:8086 --mount type=tmpfs,tmpfs-size=209715200,destination=/var/lib/influxdb influxdb:1.4.3-alpine
+    # docker_container doesn't support 
+    #docker_container:
+    #  name: influx
+    #  image: influxdb:1.4.3-alpine
+    #  state: started
+    #  ports:
+    #    - 8086:8086
+  - name: Create crontab entry to restart influxdb
+    become: yes
+    cron:
+      cron_file: /etc/crontab
+      name: InfluxDB retention
+      job: docker rm -f influx; docker run -d --name influx -p 8086:8086 --mount type=tmpfs,tmpfs-size=209715200,destination=/var/lib/influxdb influxdb:1.4.3-alpine
+      user: root
+
 - hosts: web
   roles:
   - antoiner77.caddy
