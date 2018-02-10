@@ -24,4 +24,4 @@ All applications should be running on their default ports.
 
 # 
 
-[![DigitalOcean](https://www.digitalocean.com/assets/media/logos-badges/png/DO_Powered_by_Badge_blue-fe4c6688.png)](https://digitalocean.com)
+[![DigitalOcean](https://snapshooter.io/powered_by_digital_ocean.png)](https://digitalocean.com)
