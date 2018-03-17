@@ -14,16 +14,20 @@
   pre_tasks:
   - name: Ensure webdirs exists
     file:
-      path: /var/www/img
+      path: 
       state: directory
+    with_items:
+      - /var/www/demo
+      - /var/www/demo/img
+      - /var/www/presentation
   - name: Ensure portal site exists
     copy:
       src: index.html
-      dest: /var/www/index.html
+      dest: /var/www/demo/index.html
   - name: Copy images
     copy:
       src: "img/{{ item }}"
-      dest: "/var/www/img/{{ item }}"
+      dest: "/var/www/demo/img/{{ item }}"
     with_items:
     - logo.png
     - digitalocean.png
@@ -31,9 +35,13 @@
     caddy_systemd_capabilities_enabled: True
     caddy_features: http.prometheus
     caddy_config: |
-      "{{ ansible_host }}"
-      prometheus
-      tls paulfantom@gmail.com
-      ext .html
-      root /var/www
-
+      {{ ansible_host }} {
+        ext .html
+        root /var/www/demo/
+        prometheus
+        tls paulfantom@gmail.com
+      }
+      presentation.cloudalchemy.org {
+        root /var/www/presentation
+        tls paulfantom@gmail.com
+      }
