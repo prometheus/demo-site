@@ -14,7 +14,7 @@
   pre_tasks:
   - name: Ensure webdirs exists
     file:
-      path: 
+      path: "{{ item }}"
       state: directory
     with_items:
       - /var/www/demo
