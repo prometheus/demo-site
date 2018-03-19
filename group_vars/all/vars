@@ -27,6 +27,21 @@ prometheus_targets:
       - "{{ ansible_host }}:8080"
       labels:
         env: demo
+  netdata:
+    - targets:
+      - "london.my-netdata.io"
+      - "atlanta.my-netdata.io"
+      - "sanfrancisco.my-netdata.io"
+      - "toronto.my-netdata.io"
+      - "bangalore.my-netdata.io"
+      - "singapore.my-netdata.io"
+      - "newyork.my-netdata.io"
+      - "frankfurt.my-netdata.io"
+      - "octopuscs.my-netdata.io"
+      - "ventureer.my-netdata.io"
+      - "stackscale.my-netdata.io"
+      labels:
+        env: netdata-demo
 
 prometheus_scrape_configs:
 - job_name: "prometheus"
@@ -69,6 +84,12 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
+- job_name: "netdata"
+  scrape_interval: 60s
+  metrics_path: "/api/v1/allmetrics?format=prometheus"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/netdata.yml"
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
