@@ -86,7 +86,10 @@ prometheus_scrape_configs:
       replacement: 127.0.0.1:9115  # Blackbox exporter.
 - job_name: "netdata"
   scrape_interval: 60s
-  metrics_path: "/api/v1/allmetrics?format=prometheus"
+  metrics_path: "/api/v1/allmetrics"
+  params:
+    format: prometheus
+  honor_labels: true
   file_sd_configs:
   - files:
     - "/etc/prometheus/file_sd/netdata.yml"
