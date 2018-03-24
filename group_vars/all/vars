@@ -88,7 +88,7 @@ prometheus_scrape_configs:
   scrape_interval: 60s
   metrics_path: "/api/v1/allmetrics"
   params:
-    format: prometheus
+    format: ['prometheus']
   honor_labels: true
   file_sd_configs:
   - files:
