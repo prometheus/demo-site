@@ -9,7 +9,7 @@ prometheus_alertmanager_config:
 prometheus_targets:
   node:
     - targets:
-      - "{{ ansible_host }}:9100"
+      - "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':9100') | list }}"
       labels:
         env: demo
   alertmanager:
