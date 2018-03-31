@@ -7,3 +7,4 @@
 *.retry
 roles/*
 !roles/requirements.yml
+ara*
