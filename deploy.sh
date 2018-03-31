@@ -14,7 +14,7 @@ EXIT_CODE=$?
 # Copy ARA static files
 ara generate html ara
 tar cvf ara.tgz ara
-ansible --vault-id /tmp/vault -m unarchive -a "src=ara.tgz dest=/var/www/" web
+ansible --vault-id /tmp/vault -m unarchive -a "src=ara.tgz dest=/var/www/demo/" web
 
 shred /tmp/vault
 
