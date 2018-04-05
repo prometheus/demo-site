@@ -1,14 +1,17 @@
-- hosts: all
+- name: Install python
+  hosts: all
   gather_facts: no
   tasks:
   - name: Install python
     raw: "apt update && apt install -y python"
 
-- hosts: all
+- name: Install docker
+  hosts: all
   roles:
   - SoInteractive.docker
 
-- hosts: web
+- name: Setup HTTP server
+  hosts: web
   roles:
   - antoiner77.caddy
   pre_tasks:
@@ -43,5 +46,9 @@
       }
       presentation.cloudalchemy.org {
         root /var/www/presentation
+        tls paulfantom@gmail.com
+      }
+      ara.cloudalchemy.org {
+        root /var/www/ara
         tls paulfantom@gmail.com
       }
