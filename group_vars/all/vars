@@ -96,6 +96,18 @@ prometheus_scrape_configs:
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
+alertmanager_receivers:
+- name: slack
+  slack_configs:
+  - send_resolved: true
+    api_url: $slack_api_url
+    channel: '#alerts'
+alertmanager_route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: slack
 
 grafana_security:
   admin_user: admin
