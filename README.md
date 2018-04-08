@@ -24,6 +24,32 @@ All applications should be running on their default ports.
 | alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) |
 | grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) |
 
+## Run yourself
+
+You can easily run such setup yourself without much knowledge how any part of this works. You just need to do two things:
+
+#### Change ansible inventory
+
+First of all you need to configure your inventory, ours is located in [`hosts`](hosts) file. Here you set up your target host by changing value of `ansible_host` variable. Also here you can exclude parts of this demo site, so if you don't need our website, you just remove this part:
+
+```
+[web]
+demo
+```
+
+Accordingly you can exclude grafana, prometheus, or influxdb.
+
+#### Change passwords
+
+For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/all/vault`](group_vars/all/vault) with following content:
+
+```
+vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
+vault_influxdb_password <<INSERT_YOUR_INFLUXDB_PASSWORD>>
+```
+
+You need to specify both even if you don't use grafana nor influxdb. You can look over [`group_vars/all/vault`](group_vars/all/vars) to find why.
+
 # 
 
 [![DigitalOcean](https://snapshooter.io/powered_by_digital_ocean.png)](https://digitalocean.com)
