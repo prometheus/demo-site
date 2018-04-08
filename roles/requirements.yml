@@ -9,4 +9,4 @@
 - name: SoInteractive.docker
   version: 0.11.6
 - name: antoiner77.caddy
-  version: v2.0.4
+#  version: v2.0.4

@@ -3,7 +3,8 @@
 *.idea
 .molecule
 .cache
-**__pycache__**
+__pycache__/
 *.retry
 roles/*
 !roles/requirements.yml
+ara*

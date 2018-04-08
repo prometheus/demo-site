@@ -1,10 +1,12 @@
-- hosts: all
+- name: Install python
+  hosts: all
   gather_facts: no
   tasks:
   - name: Install python
     raw: "apt update && apt install -y python"
 
-- hosts: all
+- name: Install docker
+  hosts: all
   roles:
   - SoInteractive.docker
 
@@ -40,22 +42,27 @@
         INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_password }}"
         INFLUXDB_DB: "{{ influxdb_db }}"
 
-- hosts: web
+- name: Setup HTTP server
+  hosts: web
   roles:
   - antoiner77.caddy
   pre_tasks:
   - name: Ensure webdirs exists
     file:
-      path: /var/www/img
+      path: "{{ item }}"
       state: directory
+    with_items:
+      - /var/www/demo
+      - /var/www/demo/img
+      - /var/www/presentation
   - name: Ensure portal site exists
     copy:
       src: index.html
-      dest: /var/www/index.html
+      dest: /var/www/demo/index.html
   - name: Copy images
     copy:
       src: "img/{{ item }}"
-      dest: "/var/www/img/{{ item }}"
+      dest: "/var/www/demo/img/{{ item }}"
     with_items:
     - logo.png
     - digitalocean.png
@@ -63,9 +70,17 @@
     caddy_systemd_capabilities_enabled: True
     caddy_features: http.prometheus
     caddy_config: |
-      "{{ ansible_host }}"
-      prometheus
-      tls paulfantom@gmail.com
-      ext .html
-      root /var/www
-
+      {{ ansible_host }} {
+        ext .html
+        root /var/www/demo/
+        prometheus
+        tls paulfantom@gmail.com
+      }
+      presentation.cloudalchemy.org {
+        root /var/www/presentation
+        tls paulfantom@gmail.com
+      }
+      ara.cloudalchemy.org {
+        root /var/www/ara
+        tls paulfantom@gmail.com
+      }
