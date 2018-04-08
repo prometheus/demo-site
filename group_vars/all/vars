@@ -1,7 +1,8 @@
 
 influxdb_db: cloudalchemy
 influxdb_user: prometheus
-influxdb_password: "{{ vault_influxdb_password }}"
+#influxdb_password: "{{ vault_influxdb_password }}"
+influxdb_password: "correcthorsebatterystaple"
 
 #node_exporter_web_listen_address: "127.0.0.1:9100"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
