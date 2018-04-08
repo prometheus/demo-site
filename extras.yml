@@ -23,7 +23,7 @@
       name: influxdb
       state: absent
     when: ansible_date_time.day == "01"
-  - name: Ensure influxdb bave a place to store data
+  - name: Ensure influxdb have a place to store data
     docker_volume:
       name: influxdb
       state: present
@@ -31,7 +31,9 @@
     docker_container:
       name: influx
       image: influxdb:alpine
-      state: present
+      state: started
+      labels:
+        namespace: database
       ports:
         - "8086:8086"
       volumes:

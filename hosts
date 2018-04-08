@@ -8,3 +8,6 @@ demo
 
 [web]
 demo
+
+[influxdb]
+demo

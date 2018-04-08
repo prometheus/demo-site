@@ -1,22 +1,21 @@
 
 influxdb_db: cloudalchemy
 influxdb_user: prometheus
-#influxdb_password: "{{ vault_influxdb_password }}"
-influxdb_password: "correcthorsebatterystaple"
+influxdb_password: "{{ vault_influxdb_password }}"
 
 #node_exporter_web_listen_address: "127.0.0.1:9100"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 
 prometheus_remote_write:
-  - url: "https://{{ ansible_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
+  - url: "http://{{ ansible_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
     basic_auth:
-      user: "{{ influxdb_user }}" 
+      username: "{{ influxdb_user }}" 
       password: "{{ influxdb_password }}"
 
 prometheus_remote_read:
-  - url: "https://{{ ansible_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
+  - url: "http://{{ ansible_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
     basic_auth:
-      user: "{{ influxdb_user }}" 
+      username: "{{ influxdb_user }}" 
       password: "{{ influxdb_password }}"
 
 prometheus_alertmanager_config:
