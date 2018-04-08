@@ -1,4 +1,5 @@
-
+---
+influxdb_host: "influx.cloudalchemy.org"
 influxdb_db: cloudalchemy
 influxdb_user: prometheus
 influxdb_password: "{{ vault_influxdb_password }}"
@@ -7,13 +8,13 @@ influxdb_password: "{{ vault_influxdb_password }}"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 
 prometheus_remote_write:
-  - url: "http://{{ ansible_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
+  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
     basic_auth:
       username: "{{ influxdb_user }}" 
       password: "{{ influxdb_password }}"
 
 prometheus_remote_read:
-  - url: "http://{{ ansible_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
+  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
     basic_auth:
       username: "{{ influxdb_user }}" 
       password: "{{ influxdb_password }}"
@@ -27,7 +28,7 @@ prometheus_alertmanager_config:
 prometheus_targets:
   node:
     - targets:
-      - "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':9100') | list }}"
+        "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':9100') | list }}"
       labels:
         env: demo
   alertmanager:
@@ -42,7 +43,7 @@ prometheus_targets:
         env: demo
   docker:
     - targets:
-      - "{{ ansible_host }}:8080"
+        "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
       labels:
         env: demo
   netdata:
@@ -102,6 +103,11 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
+- job_name: 'influxdb'
+  metrics_path: /metrics
+  static_configs:
+    - targets:
+      - "{{ influxdb_host }}:8086"
 - job_name: "netdata"
   scrape_interval: 60s
   metrics_path: "/api/v1/allmetrics"
