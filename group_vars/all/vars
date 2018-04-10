@@ -156,5 +156,5 @@ grafana_dashboards:
     revision_id: '2'
     datasource: 'Prometheus'
   - dashboard_id: '4271'
-    revision_id: '2'
+    revision_id: '3'
     datasource: 'Prometheus'
