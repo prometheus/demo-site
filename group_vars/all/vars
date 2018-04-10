@@ -151,10 +151,10 @@ grafana_datasources:
 grafana_dashboards:
   - dashboard_id: '1860'
     revision_id: '8'
-    datasource: 'Prometheus'
+    datasource: '{{ grafana_datasources.0.name }}'
   - dashboard_id: '3662'
     revision_id: '2'
-    datasource: 'Prometheus'
+    datasource: '{{ grafana_datasources.0.name }}'
   - dashboard_id: '4271'
     revision_id: '3'
-    datasource: 'Prometheus'
+    datasource: '{{ grafana_datasources.0.name }}'
