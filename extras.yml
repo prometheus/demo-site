@@ -83,7 +83,3 @@
         root /var/www/presentation
         tls paulfantom@gmail.com
       }
-      ara.cloudalchemy.org {
-        root /var/www/ara
-        tls paulfantom@gmail.com
-      }
