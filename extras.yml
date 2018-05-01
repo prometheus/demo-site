@@ -69,7 +69,7 @@
     - logo.png
     - digitalocean.png
   vars:
-    caddy_update: True
+    caddy_update: False
     caddy_systemd_capabilities_enabled: True
     caddy_features: http.prometheus
     caddy_config: |
