@@ -31,6 +31,9 @@
       log_options:
         syslog-facility: local0
         tag: cadvisor
+    retries: 5
+    register: result
+    until: result is succeeded
   vars:
     docker_default_config: {}
     docker_version: "latest"
@@ -69,6 +72,9 @@
         INFLUXDB_ADMIN_USER: "{{ influxdb_user }}"
         INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_password }}"
         INFLUXDB_DB: "{{ influxdb_db }}"
+    retries: 5
+    register: result
+    until: result is succeeded
 
 - name: Setup HTTP server
   hosts: web
