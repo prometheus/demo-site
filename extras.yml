@@ -61,6 +61,7 @@
       name: influx
       image: influxdb:alpine
       state: started
+      restart_policy: always
       labels:
         namespace: database
       ports:
