@@ -89,7 +89,6 @@
     with_items:
       - /var/www/demo
       - /var/www/demo/img
-      - /var/www/presentation
   - name: Ensure portal site exists
     copy:
       src: index.html
@@ -110,9 +109,5 @@
         ext .html
         root /var/www/demo/
         prometheus
-        tls paulfantom@gmail.com
-      }
-      presentation.cloudalchemy.org {
-        root /var/www/presentation
-        tls paulfantom@gmail.com
+        tls prometheus-team@googlegroups.com
       }
