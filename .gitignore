@@ -8,3 +8,4 @@ __pycache__/
 roles/*
 !roles/requirements.yml
 ara*
+.vault-password
