@@ -5,6 +5,8 @@ influxdb_user: prometheus
 influxdb_password: "{{ vault_influxdb_password }}"
 
 #node_exporter_web_listen_address: "127.0.0.1:9100"
+blackbox_exporter_web_listen_address: "127.0.0.1:9115"
+snmp_exporter_web_listen_address: "127.0.0.1:9116"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 
 prometheus_remote_write:
