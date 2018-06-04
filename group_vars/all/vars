@@ -44,7 +44,7 @@ prometheus_targets:
         env: demo
   docker:
     - targets:
-        "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
+        "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
       labels:
         env: demo
   netdata:

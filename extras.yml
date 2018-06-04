@@ -6,7 +6,7 @@
     raw: "apt update && apt install -y python"
 
 - name: Install docker
-  hosts: all
+  hosts: influxdb
   roles:
   - mongrelion.docker
   tasks:
