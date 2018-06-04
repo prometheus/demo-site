@@ -6,6 +6,7 @@ influxdb_password: "{{ vault_influxdb_password }}"
 
 #node_exporter_web_listen_address: "127.0.0.1:9100"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
+prometheus_storage_retention: "14d"
 
 prometheus_remote_write:
   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
