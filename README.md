@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/cloudalchemy/demo-site.svg?branch=master)](https://travis-ci.org/cloudalchemy/demo-site)
 [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
-[![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](https://kiwiirc.com/nextclient/#ircs://irc.freenode.net/#cloudalchemy)
+[![IRC](https://img.shields.io/badge/irc.freenode.net-%23cloudalchemy-yellow.svg)](https://kiwiirc.com/nextclient/#ircs://irc.freenode.net/#cloudalchemy)
 
 ## [demo.cloudalchemy.org](https://demo.cloudalchemy.org)
 
