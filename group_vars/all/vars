@@ -49,11 +49,11 @@ prometheus_targets:
       - "{{ ansible_host }}:3000"
       labels:
         env: demo
- docker:
-   - targets:
-       "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
-     labels:
-       env: demo
+  docker:
+    - targets:
+        "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
+      labels:
+        env: demo
   netdata:
     - targets:
       - "london.my-netdata.io"
