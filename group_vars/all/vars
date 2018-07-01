@@ -8,17 +8,17 @@ influxdb_password: "{{ vault_influxdb_password }}"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "14d"
 
-prometheus_remote_write:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}" 
-      password: "{{ influxdb_password }}"
+# prometheus_remote_write:
+#   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
+#     basic_auth:
+#       username: "{{ influxdb_user }}" 
+#       password: "{{ influxdb_password }}"
 
-prometheus_remote_read:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}" 
-      password: "{{ influxdb_password }}"
+# prometheus_remote_read:
+#   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
+#     basic_auth:
+#       username: "{{ influxdb_user }}" 
+#       password: "{{ influxdb_password }}"
 
 prometheus_alertmanager_config:
   - scheme: http
