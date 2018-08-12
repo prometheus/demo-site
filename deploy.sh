@@ -8,7 +8,7 @@ echo "Creating Vault-file: /tmp/vault"
 ${ANSIBLE_VAULT_PASSWORD}
 EOM
 
-ansible-playbook --vault-id /tmp/vault extras.yml #site.yml
+ansible-playbook --vault-id /tmp/vault extras.yml site.yml
 EXIT_CODE=$?
 
 # Copy ARA static files
