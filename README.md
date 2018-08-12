@@ -24,6 +24,18 @@ All applications should be running on their default ports.
 | alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) |
 | grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) |
 
+## Important notice
+
+This repository consists of two playbooks:
+  - [site.yml](site.yml) - which deploys basic prometheus/grafana stack without additional http proxies and with software listening on default ports
+  - [extras.yml](extras.yml) - adds influxdb as a long-term storage and deploys caddy http proxy. This will allow HTTPS connections to services like prometheus
+
+Such setup causes that mose of services can be accessed in two ways. As an example, prometheus can be accessed via:
+  - **http**://demo.cloudalchemy.org:9090 - default way
+  - **https**://prometheus.demo.cloudalchemy.org - workaround which in backgroud communicates with prometheus via insecure, "default" channel mentioned above
+
+This workaround was needed to solve issue #13 and still provide a playbook which could be used by everyone [site.yml](site.yml).
+
 ## Run yourself
 
 You can easily run such setup yourself without much knowledge how any part of this works. You just need to do two things:

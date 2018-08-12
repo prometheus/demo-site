@@ -1,6 +1,7 @@
+---
 - name: Install python
   hosts: all
-  gather_facts: no
+  gather_facts: false
   tasks:
   - name: Install python
     raw: "apt update && apt install -y python"
@@ -37,7 +38,7 @@
   vars:
     docker_default_config: {}
     docker_version: "latest"
-    docker_compose: False
+    docker_compose: false
 
 - name: Configure persistent data store
   hosts: influxdb
@@ -102,8 +103,15 @@
     - logo.png
     - digitalocean.png
   vars:
-    caddy_update: False
-    caddy_systemd_capabilities_enabled: True
+    port_mapping:
+      grafana: 3000
+      prometheus: 9090
+      alertmanager: 9093
+      node: 9100
+      blackbox: 9115
+      snmp: 9116
+    caddy_update: false
+    caddy_systemd_capabilities_enabled: true
     caddy_features: http.prometheus
     caddy_config: |
       {{ ansible_host }} {
@@ -116,3 +124,9 @@
         root /var/www/presentation
         tls paulfantom@gmail.com
       }
+      {% for name, port in port_mapping.items() %}
+      {{ name }}.{{ ansible_host }} {
+        proxy / 127.0.0.1:{{ port }}
+        tls paulfantom@gmail.com
+      }
+      {% endfor %}
