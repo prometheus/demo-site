@@ -4,14 +4,13 @@ influxdb_db: cloudalchemy
 influxdb_user: prometheus
 influxdb_password: "{{ vault_influxdb_password }}"
 
-# node_exporter_web_listen_address: "127.0.0.1:9100"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "14d"
 
 prometheus_remote_write:
   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
     basic_auth:
-      username: "{{ influxdb_user }}" 
+      username: "{{ influxdb_user }}"
       password: "{{ influxdb_password }}"
     write_relabel_configs:
       - source_labels: ['__name__']
@@ -21,7 +20,7 @@ prometheus_remote_write:
 prometheus_remote_read:
   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
     basic_auth:
-      username: "{{ influxdb_user }}" 
+      username: "{{ influxdb_user }}"
       password: "{{ influxdb_password }}"
     read_recent: false
     required_matchers:
@@ -30,7 +29,7 @@ prometheus_remote_read:
 prometheus_alertmanager_config:
   - scheme: http
     static_configs:
-      - targets: 
+      - targets:
         - "{{ ansible_host }}:9093"
 
 prometheus_targets:
@@ -144,7 +143,7 @@ alertmanager_route:
 grafana_security:
   admin_user: admin
   admin_password: "{{ vault_grafana_password }}"
-  
+
 grafana_auth:
   anonymous:
     org_name: "Main Org."
