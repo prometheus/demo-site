@@ -8,6 +8,7 @@ echo "Creating Vault-file: /tmp/vault"
 ${ANSIBLE_VAULT_PASSWORD}
 EOM
 
+cd ../
 ansible-playbook --vault-id /tmp/vault extras.yml site.yml
 EXIT_CODE=$?
 
