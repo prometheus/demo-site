@@ -57,7 +57,7 @@ For security measures we encrypted some of our passwords, but it is easy to use 
 
 ```
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
-vault_influxdb_password <<INSERT_YOUR_INFLUXDB_PASSWORD>>
+vault_influxdb_password: <<INSERT_YOUR_INFLUXDB_PASSWORD>>
 ```
 
 You need to specify both even if you don't use grafana nor influxdb. You can look over [`group_vars/all/vault`](group_vars/all/vars) to find why.
@@ -66,7 +66,7 @@ You need to specify both even if you don't use grafana nor influxdb. You can loo
 
 ```bash
 # Download roles
-ansible-galaxy install -f roles/requirements.yml
+ansible-galaxy install -r roles/requirements.yml
 
 # Run playbook
 ansible-playbook site.yml
