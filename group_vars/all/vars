@@ -7,24 +7,24 @@ influxdb_password: "{{ vault_influxdb_password }}"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "14d"
 
-prometheus_remote_write:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}"
-      password: "{{ influxdb_password }}"
-    write_relabel_configs:
-      - source_labels: ['__name__']
-        regex: 'node_load1'
-        action: keep
-
-prometheus_remote_read:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}"
-      password: "{{ influxdb_password }}"
-    read_recent: false
-    required_matchers:
-      job: "node"
+# prometheus_remote_write:
+#   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
+#     basic_auth:
+#       username: "{{ influxdb_user }}"
+#       password: "{{ influxdb_password }}"
+#     write_relabel_configs:
+#       - source_labels: ['__name__']
+#         regex: 'node_load1'
+#         action: keep
+# 
+# prometheus_remote_read:
+#   - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
+#     basic_auth:
+#       username: "{{ influxdb_user }}"
+#       password: "{{ influxdb_password }}"
+#     read_recent: false
+#     required_matchers:
+#       job: "node"
 
 prometheus_alertmanager_config:
   - scheme: http
@@ -48,11 +48,11 @@ prometheus_targets:
       - "{{ ansible_host }}:3000"
       labels:
         env: demo
-  docker:
-    - targets:
-        "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
-      labels:
-        env: demo
+#  docker:
+#    - targets:
+#        "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
+#      labels:
+#        env: demo
   netdata:
     - targets:
       - "london.my-netdata.io"
@@ -110,11 +110,11 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
-- job_name: 'influxdb'
-  metrics_path: /metrics
-  static_configs:
-    - targets:
-      - "{{ influxdb_host }}:8086"
+#- job_name: 'influxdb'
+#  metrics_path: /metrics
+#  static_configs:
+#    - targets:
+#      - "{{ influxdb_host }}:8086"
 - job_name: "netdata"
   scrape_interval: 60s
   metrics_path: "/api/v1/allmetrics"

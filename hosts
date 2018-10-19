@@ -1,5 +1,5 @@
 demo ansible_host=demo.cloudalchemy.org ansible_user=root
-influx ansible_host=influx.cloudalchemy.org ansible_user=root
+#influx ansible_host=influx.cloudalchemy.org ansible_user=root
 
 [prometheus]
 demo
@@ -10,5 +10,5 @@ demo
 [web]
 demo
 
-[influxdb]
-influx
+#[influxdb]
+#influx

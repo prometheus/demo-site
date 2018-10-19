@@ -6,77 +6,77 @@
   - name: Install python
     raw: "apt update && apt install -y python"
 
-- name: Install docker
-  hosts: influxdb
-  roles:
-  - mongrelion.docker
-  tasks:
-  - name: Ensure cAdvisor is started
-    docker_container:
-      name: cadvisor
-      image: google/cadvisor:latest
-      restart_policy: always
-      memory: 256m
-      command: "--disable_metrics disk,tcp,udp --housekeeping_interval 5s"
-      labels:
-        namespace: management
-      ports:
-        - "8080:8080"
-      volumes:
-        - "/:/rootfs:ro"
-        - "/var/run:/var/run:rw"
-        - "/sys:/sys:ro"
-        - "/var/lib/docker:/var/lib/docker:ro"
-        - "/etc/localtime:/etc/localtime:ro"
-      log_driver: syslog
-      log_options:
-        syslog-facility: local0
-        tag: cadvisor
-    retries: 5
-    register: result
-    until: result is succeeded
-  vars:
-    docker_default_config: {}
-    docker_version: "latest"
-    docker_compose: false
-
-- name: Configure persistent data store
-  hosts: influxdb
-  tasks:
-  - name: Retain influxdb container
-    docker_container:
-      name: influx
-      state: absent
-    when: ansible_date_time.day == "01"
-  - name: Retain influxdb data
-    docker_volume:
-      name: influxdb
-      state: absent
-    when: ansible_date_time.day == "01"
-  - name: Ensure influxdb has a place to store data
-    docker_volume:
-      name: influxdb
-      state: present
-  - name: Start influxdb container
-    docker_container:
-      name: influx
-      image: influxdb:alpine
-      state: started
-      restart_policy: always
-      labels:
-        namespace: database
-      ports:
-        - "8086:8086"
-      volumes:
-        - "influxdb:/var/lib/influxdb"
-      env:
-        INFLUXDB_HTTP_AUTH_ENABLED: "true"
-        INFLUXDB_ADMIN_USER: "{{ influxdb_user }}"
-        INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_password }}"
-        INFLUXDB_DB: "{{ influxdb_db }}"
-    retries: 5
-    register: result
-    until: result is succeeded
+#- name: Install docker
+#  hosts: influxdb
+#  roles:
+#  - mongrelion.docker
+#  tasks:
+#  - name: Ensure cAdvisor is started
+#    docker_container:
+#      name: cadvisor
+#      image: google/cadvisor:latest
+#      restart_policy: always
+#      memory: 256m
+#      command: "--disable_metrics disk,tcp,udp --housekeeping_interval 5s"
+#      labels:
+#        namespace: management
+#      ports:
+#        - "8080:8080"
+#      volumes:
+#        - "/:/rootfs:ro"
+#        - "/var/run:/var/run:rw"
+#        - "/sys:/sys:ro"
+#        - "/var/lib/docker:/var/lib/docker:ro"
+#        - "/etc/localtime:/etc/localtime:ro"
+#      log_driver: syslog
+#      log_options:
+#        syslog-facility: local0
+#        tag: cadvisor
+#    retries: 5
+#    register: result
+#    until: result is succeeded
+#  vars:
+#    docker_default_config: {}
+#    docker_version: "latest"
+#    docker_compose: false
+#
+#- name: Configure persistent data store
+#  hosts: influxdb
+#  tasks:
+#  - name: Retain influxdb container
+#    docker_container:
+#      name: influx
+#      state: absent
+#    when: ansible_date_time.day == "01"
+#  - name: Retain influxdb data
+#    docker_volume:
+#      name: influxdb
+#      state: absent
+#    when: ansible_date_time.day == "01"
+#  - name: Ensure influxdb has a place to store data
+#    docker_volume:
+#      name: influxdb
+#      state: present
+#  - name: Start influxdb container
+#    docker_container:
+#      name: influx
+#      image: influxdb:alpine
+#      state: started
+#      restart_policy: always
+#      labels:
+#        namespace: database
+#      ports:
+#        - "8086:8086"
+#      volumes:
+#        - "influxdb:/var/lib/influxdb"
+#      env:
+#        INFLUXDB_HTTP_AUTH_ENABLED: "true"
+#        INFLUXDB_ADMIN_USER: "{{ influxdb_user }}"
+#        INFLUXDB_ADMIN_PASSWORD: "{{ influxdb_password }}"
+#        INFLUXDB_DB: "{{ influxdb_db }}"
+#    retries: 5
+#    register: result
+#    until: result is succeeded
 
 - name: Setup HTTP server
   hosts: web
