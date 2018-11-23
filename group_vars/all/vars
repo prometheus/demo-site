@@ -120,6 +120,7 @@ prometheus_scrape_configs:
   metrics_path: "/api/v1/allmetrics"
   params:
     format: ['prometheus']
+    data: ['raw']
   honor_labels: true
   file_sd_configs:
   - files:
