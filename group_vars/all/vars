@@ -92,10 +92,10 @@ prometheus_scrape_configs:
   file_sd_configs:
   - files:
     - "/etc/prometheus/file_sd/grafana.yml"
-- job_name: "docker"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/docker.yml"
+#- job_name: "docker"
+#  file_sd_configs:
+#  - files:
+#    - "/etc/prometheus/file_sd/docker.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
