@@ -138,12 +138,13 @@
     shell: |
       go get github.com/prometheus/client_golang/examples/random
       mv $GOPATH/bin/random /tmp/random_exporter
-    creates: /tmp/random_exporter
+    args:
+      creates: /tmp/random_exporter
     delegate_to: localhost
     run_once: true
   - name: Copy random_exporter binary
     copy:
-      src: random
+      src: /tmp/random_exporter
       dest: /usr/local/bin/random_exporter
       owner: root
       group: root
