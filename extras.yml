@@ -136,7 +136,7 @@
   tasks:
   - name: Locally build random_exporter
     shell: |
-      go get github.com/prometheus/client_golang/examples/random
+      go get -u github.com/prometheus/client_golang/examples/random
       mv $GOPATH/bin/random /tmp/random_exporter
     args:
       creates: /tmp/random_exporter
