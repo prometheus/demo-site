@@ -110,7 +110,7 @@
       node: 9100
       blackbox: 9115
       snmp: 9116
-    caddy_update: false
+    caddy_update: true
     caddy_systemd_capabilities_enabled: true
     caddy_features: http.prometheus
     caddy_config: |
