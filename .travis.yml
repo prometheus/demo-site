@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y golang sshpass
 install:
-  - pip3 install ansible jmespath git-lfs ara ansible-lint
+  - pip3 install ansible jmespath git-lfs ansible-lint
 script:
   - ansible-galaxy install -r roles/requirements.yml
   - ansible-playbook --syntax-check site.yml
