@@ -48,26 +48,6 @@ prometheus_targets:
       - "{{ ansible_host }}:3000"
       labels:
         env: demo
-#  docker:
-#    - targets:
-#        "{{ groups['influxdb'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
-#      labels:
-#        env: demo
-#  netdata:
-#    - targets:
-#      - "london.my-netdata.io"
-#      - "atlanta.my-netdata.io"
-#      - "sanfrancisco.my-netdata.io"
-#      - "toronto.my-netdata.io"
-#      - "bangalore.my-netdata.io"
-#      - "singapore.my-netdata.io"
-#      - "newyork.my-netdata.io"
-#      - "frankfurt.my-netdata.io"
-#      - "octopuscs.my-netdata.io"
-#      - "ventureer.my-netdata.io"
-#      - "stackscale.my-netdata.io"
-#      labels:
-#        env: netdata-demo
 
 prometheus_scrape_configs:
 - job_name: "prometheus"
@@ -97,10 +77,6 @@ prometheus_scrape_configs:
   file_sd_configs:
   - files:
     - "/etc/prometheus/file_sd/grafana.yml"
-#- job_name: "docker"
-#  file_sd_configs:
-#  - files:
-#    - "/etc/prometheus/file_sd/docker.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
@@ -115,11 +91,12 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
-#- job_name: 'influxdb'
-#  metrics_path: /metrics
-#  static_configs:
-#    - targets:
-#      - "{{ influxdb_host }}:8086"
+- job_name: fedora
+  metrics_path: /private-will-move/metrics
+  scheme: https
+  static_configs:
+    - targets:
+      - "updates.coreos.stg.fedoraproject.org"
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
