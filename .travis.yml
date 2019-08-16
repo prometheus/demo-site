@@ -2,12 +2,14 @@
 # sudo: required
 dist: xenial
 language: python
+python:
+  - "3.7"
 cache: pip
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y golang sshpass
 install:
-  - pip install ansible jmespath git-lfs ara ansible-lint
+  - pip3 install ansible jmespath git-lfs ara ansible-lint
 script:
   - ansible-galaxy install -r roles/requirements.yml
   - ansible-playbook --syntax-check site.yml
