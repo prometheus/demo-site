@@ -1,18 +1,23 @@
-#sudo: required
+---
+# sudo: required
+dist: xenial
 language: python
+python:
+  - "3.7"
 cache: pip
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y golang sshpass
 install:
-  - pip install ansible jmespath git-lfs ara
+  - pip3 install ansible jmespath git-lfs ansible-lint
 script:
   - ansible-galaxy install -r roles/requirements.yml
   - ansible-playbook --syntax-check site.yml
+  - ansible-lint site.yml || echo "Linting problems found"
 deploy:
   provider: script
   skip_cleanup: true
-  script: ./deploy.sh
+  script: .travis/deploy.sh
   on:
     branch: master
 branches:
