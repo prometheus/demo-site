@@ -6,7 +6,5 @@
 - name: cloudalchemy.grafana
 
 # EXTRAS
-- name: mongrelion.docker
-  version: 0.1.1
 - name: antoiner77.caddy
 #  version: v2.0.4

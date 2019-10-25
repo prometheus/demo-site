@@ -1,30 +1,11 @@
 ---
-influxdb_host: "influx.cloudalchemy.org"
-influxdb_db: cloudalchemy
-influxdb_user: prometheus
-influxdb_password: "{{ vault_influxdb_password }}"
-
-#node_exporter_web_listen_address: "127.0.0.1:9100"
-blackbox_exporter_web_listen_address: "127.0.0.1:9115"
-snmp_exporter_web_listen_address: "127.0.0.1:9116"
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
-
-prometheus_remote_write:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/write?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}" 
-      password: "{{ influxdb_password }}"
-
-prometheus_remote_read:
-  - url: "http://{{ influxdb_host }}:8086/api/v1/prom/read?db={{ influxdb_db }}"
-    basic_auth:
-      username: "{{ influxdb_user }}" 
-      password: "{{ influxdb_password }}"
+prometheus_storage_retention: "14d"
 
 prometheus_alertmanager_config:
   - scheme: http
     static_configs:
-      - targets: 
+      - targets:
         - "{{ ansible_host }}:9093"
 
 prometheus_targets:
@@ -43,26 +24,6 @@ prometheus_targets:
       - "{{ ansible_host }}:3000"
       labels:
         env: demo
-  docker:
-    - targets:
-        "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':8080') | list }}"
-      labels:
-        env: demo
-  netdata:
-    - targets:
-      - "london.my-netdata.io"
-      - "atlanta.my-netdata.io"
-      - "sanfrancisco.my-netdata.io"
-      - "toronto.my-netdata.io"
-      - "bangalore.my-netdata.io"
-      - "singapore.my-netdata.io"
-      - "newyork.my-netdata.io"
-      - "frankfurt.my-netdata.io"
-      - "octopuscs.my-netdata.io"
-      - "ventureer.my-netdata.io"
-      - "stackscale.my-netdata.io"
-      labels:
-        env: netdata-demo
 
 prometheus_scrape_configs:
 - job_name: "prometheus"
@@ -70,6 +31,11 @@ prometheus_scrape_configs:
   static_configs:
   - targets:
     - "{{ ansible_host }}:9090"
+- job_name: "random"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:8999"
 - job_name: "caddy"
   metrics_path: "/metrics"
   static_configs:
@@ -87,10 +53,6 @@ prometheus_scrape_configs:
   file_sd_configs:
   - files:
     - "/etc/prometheus/file_sd/grafana.yml"
-- job_name: "docker"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/docker.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
@@ -105,20 +67,6 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
-- job_name: 'influxdb'
-  metrics_path: /metrics
-  static_configs:
-    - targets:
-      - "{{ influxdb_host }}:8086"
-- job_name: "netdata"
-  scrape_interval: 60s
-  metrics_path: "/api/v1/allmetrics"
-  params:
-    format: ['prometheus']
-  honor_labels: true
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/netdata.yml"
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
@@ -126,7 +74,6 @@ alertmanager_receivers:
 - name: slack
   slack_configs:
   - send_resolved: true
-    api_url: $slack_api_url
     channel: '#alerts'
 alertmanager_route:
   group_by: ['alertname', 'cluster', 'service']
@@ -138,7 +85,7 @@ alertmanager_route:
 grafana_security:
   admin_user: admin
   admin_password: "{{ vault_grafana_password }}"
-  
+
 grafana_auth:
   anonymous:
     org_name: "Main Org."
@@ -152,11 +99,11 @@ grafana_datasources:
     isDefault: true
 grafana_dashboards:
   - dashboard_id: '1860'
-    revision_id: '8'
+    revision_id: '12'
     datasource: '{{ grafana_datasources.0.name }}'
   - dashboard_id: '3662'
     revision_id: '2'
     datasource: '{{ grafana_datasources.0.name }}'
   - dashboard_id: '4271'
-    revision_id: '3'
+    revision_id: '4'
     datasource: '{{ grafana_datasources.0.name }}'
