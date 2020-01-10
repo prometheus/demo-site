@@ -9,7 +9,7 @@
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
 Site is provisioned with ansible running every day and on almost all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
 
-Have a look at the configuration file [group_vars/all/vars](group_vars/all/vars).
+Have a look at configuration files in [group_vars/](group_vars).
 
 ## Applications
 
@@ -26,15 +26,13 @@ All applications should be running on their default ports.
 
 ## Important notice
 
-This repository consists of two playbooks:
-  - [site.yml](site.yml) - which deploys basic prometheus/grafana stack without additional http proxies and with software listening on default ports
-  - [extras.yml](extras.yml) - installs python, caddy http proxy, and setups random_exporter. This will allow HTTPS connections to services like prometheus. Before running it, golang is required to be installed on deployer machine.
+Before running, golang is required to be installed on deployer machine (neccessary to install random_exporter).
 
-Such setup causes that mose of services can be accessed in two ways. As an example, prometheus can be accessed via:
+Most services can be accessed in two ways (links in [Applications](#Applications) section. As an example, prometheus can be accessed via:
   - **http**://demo.prometheus.io:9090 - default way
   - **https**://prometheus.prometheus.io - workaround which in backgroud communicates with prometheus via insecure, "default" channel mentioned above
 
-This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13) and still provide a playbook which could be used by everyone - [site.yml](site.yml).
+This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13).
 
 ## Run yourself
 
@@ -53,13 +51,11 @@ Accordingly you can exclude grafana, prometheus.
 
 #### Change passwords
 
-For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/all/vault`](group_vars/all/vault) with following content:
+For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/grafana/vault`](group_vars/grafana/vault) with following content:
 
 ```
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
 ```
-
-You need to specify both even if you don't use grafana. You can look over [`group_vars/all/vars`](group_vars/all/vars) to find why.
 
 #### Run as usual Ansible playbook
 
