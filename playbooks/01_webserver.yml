@@ -1,0 +1,25 @@
+---
+- name: Setup HTTP server
+  hosts: web
+  roles:
+  - caddy_ansible.caddy_ansible
+  pre_tasks:
+  - name: Ensure webdirs exists
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - /var/www/demo
+      - /var/www/demo/img
+  - name: Ensure portal site exists
+    copy:
+      src: index.html
+      dest: /var/www/demo/index.html
+  - name: Copy images
+    copy:
+      src: "img/{{ item }}"
+      dest: "/var/www/demo/img/{{ item }}"
+    with_items:
+      - logo.png
+      - digitalocean.png
+

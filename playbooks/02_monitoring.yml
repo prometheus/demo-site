@@ -1,58 +1,27 @@
 ---
-- name: Install python
+- name: Deploy node_exporter
   hosts: all
-  gather_facts: false
-  tasks:
-  - name: Install python
-    raw: "apt update && apt install -y python"
-
-- name: Setup HTTP server
-  hosts: web
   roles:
-  - antoiner77.caddy
-  pre_tasks:
-  - name: Ensure webdirs exists
-    file:
-      path: "{{ item }}"
-      state: directory
-    with_items:
-      - /var/www/demo
-      - /var/www/demo/img
-  - name: Ensure portal site exists
-    copy:
-      src: index.html
-      dest: /var/www/demo/index.html
-  - name: Copy images
-    copy:
-      src: "img/{{ item }}"
-      dest: "/var/www/demo/img/{{ item }}"
-    with_items:
-      - logo.png
-      - digitalocean.png
-  vars:
-    port_mapping:
-      grafana: 3000
-      prometheus: 9090
-      alertmanager: 9093
-      node: 9100
-      blackbox: 9115
-      snmp: 9116
-    caddy_update: true
-    caddy_systemd_capabilities_enabled: true
-    caddy_features: http.prometheus
-    caddy_config: |
-      {{ ansible_host }} {
-        ext .html
-        root /var/www/demo/
-        prometheus
-        tls prometheus-team@googlegroups.com
-      }
-      {% for name, port in port_mapping.items() %}
-      {{ name }}.{{ ansible_host }} {
-        proxy / 127.0.0.1:{{ port }}
-        tls prometheus-team@googlegroups.com
-      }
-      {% endfor %}
+    - cloudalchemy.node-exporter
+  tags:
+    - node_exporter
+
+- name: Setup core monitoring software
+  hosts: prometheus
+  roles:
+    - cloudalchemy.blackbox-exporter
+    - cloudalchemy.snmp-exporter
+    - cloudalchemy.prometheus
+    - cloudalchemy.alertmanager
+  tags:
+    - prometheus
+
+- name: Deploy grafana
+  hosts: grafana
+  roles:
+    - cloudalchemy.grafana
+  tags:
+    - grafana
 
 - name: Setup random number exporter
   hosts: web

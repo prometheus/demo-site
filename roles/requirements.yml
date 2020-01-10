@@ -9,3 +9,5 @@
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
   version: v2.1.0
+- name: dev-sec.ssh-hardening
+- name: dev-sec.os-hardening
