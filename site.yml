@@ -1,10 +1,10 @@
 ---
 - import_playbook: playbooks/00_system.yml
   tags:
-    - system
+  - system
 - import_playbook: playbooks/01_webserver.yml
   tags:
-    - webserver
+  - webserver
 - import_playbook: playbooks/02_monitoring.yml
   tags:
-    - monitoring
+  - monitoring
