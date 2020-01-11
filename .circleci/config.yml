@@ -53,6 +53,9 @@ workflows:
   commit:
     jobs:
       - test
+      - add_ssh_keys:
+         fingerprints:
+           - "46:a1:bb:55:6e3a:a5:2f:ea:13:46:ae:24:f0:19"
       - deploy:
           requires:
             - test
@@ -69,6 +72,9 @@ workflows:
                 - master
     jobs:
       - test
+      - add_ssh_keys:
+         fingerprints:
+           - "46:a1:bb:55:6e3a:a5:2f:ea:13:46:ae:24:f0:19"
       - deploy:
           requires:
             - test
