@@ -1,4 +1,4 @@
-ansible
+ansible==2.8
 jmespath
 git-lfs
 ansible-lint
