@@ -17,8 +17,10 @@
       dest: /var/www/demo/index.html
   - name: Copy images
     copy:
-      src: "img/{{ item }}"
-      dest: "/var/www/demo/img/{{ item }}"
+      src: "{{ item.url }}"
+      dest: "/var/www/demo/img/{{ item.name }}"
     with_items:
-    - logo.png
-    - digitalocean.png
+    - name: logo.png
+      url: "https://github.com/prometheus/docs/raw/master/static/prometheus_logo.png"
+    - name: digitalocean.png
+      url: "https://github.com/prometheus/demo-site/raw/prometheus/playbooks/files/img/digitalocean.png"
