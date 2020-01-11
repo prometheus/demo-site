@@ -9,3 +9,4 @@ roles/*
 !roles/requirements.yml
 ara*
 .vault-password
+playbooks/files/random

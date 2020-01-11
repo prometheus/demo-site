@@ -1,6 +1,9 @@
-demo ansible_host=demo.prometheus.io ansible_user=root
+demo ansible_host=demo.do.prometheus.io ansible_user=root
 
 [prometheus]
+demo
+
+[alertmanager]
 demo
 
 [grafana]

@@ -1,0 +1,3 @@
+jmespath
+git-lfs
+ansible-lint

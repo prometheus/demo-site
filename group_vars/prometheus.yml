@@ -1,6 +1,6 @@
 ---
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
-prometheus_storage_retention: "14d"
+prometheus_storage_retention: "31d"
 
 prometheus_alertmanager_config:
   - scheme: http
@@ -17,11 +17,6 @@ prometheus_targets:
   alertmanager:
     - targets:
       - "{{ ansible_host }}:9093"
-      labels:
-        env: demo
-  grafana:
-    - targets:
-      - "{{ ansible_host }}:3000"
       labels:
         env: demo
 
@@ -41,6 +36,10 @@ prometheus_scrape_configs:
   static_configs:
   - targets:
     - "localhost:9180"
+- job_name: "grafana"
+  static_configs:
+  - targets:
+      - "{{ ansible_host }}:3000"
 - job_name: "node"
   file_sd_configs:
   - files:
@@ -49,10 +48,6 @@ prometheus_scrape_configs:
   file_sd_configs:
   - files:
     - "/etc/prometheus/file_sd/alertmanager.yml"
-- job_name: "grafana"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/grafana.yml"
 - job_name: 'blackbox'
   metrics_path: /probe
   params:
@@ -67,43 +62,3 @@ prometheus_scrape_configs:
       target_label: instance
     - target_label: __address__
       replacement: 127.0.0.1:9115  # Blackbox exporter.
-
-alertmanager_external_url: "http://{{ ansible_host }}:9093"
-alertmanager_slack_api_url: "http://example.org"
-alertmanager_receivers:
-- name: slack
-  slack_configs:
-  - send_resolved: true
-    channel: '#alerts'
-alertmanager_route:
-  group_by: ['alertname', 'cluster', 'service']
-  group_wait: 30s
-  group_interval: 5m
-  repeat_interval: 4h
-  receiver: slack
-
-grafana_security:
-  admin_user: admin
-  admin_password: "{{ vault_grafana_password }}"
-
-grafana_auth:
-  anonymous:
-    org_name: "Main Org."
-    org_role: Viewer
-
-grafana_datasources:
-  - name: "Prometheus"
-    type: "prometheus"
-    access: "proxy"
-    url: "http://{{ ansible_host }}:9090"
-    isDefault: true
-grafana_dashboards:
-  - dashboard_id: '1860'
-    revision_id: '12'
-    datasource: '{{ grafana_datasources.0.name }}'
-  - dashboard_id: '3662'
-    revision_id: '2'
-    datasource: '{{ grafana_datasources.0.name }}'
-  - dashboard_id: '4271'
-    revision_id: '4'
-    datasource: '{{ grafana_datasources.0.name }}'

@@ -1,3 +1,4 @@
+---
 - name: cloudalchemy.node-exporter
 - name: cloudalchemy.snmp-exporter
 - name: cloudalchemy.blackbox-exporter
@@ -6,5 +7,9 @@
 - name: cloudalchemy.grafana
 
 # EXTRAS
-- name: antoiner77.caddy
-#  version: v2.0.4
+- name: caddy_ansible.caddy_ansible
+  version: v2.1.0
+- name: dev-sec.ssh-hardening
+- name: dev-sec.os-hardening
+- name: jnv.unattended-upgrades
+  version: v1.7.1
