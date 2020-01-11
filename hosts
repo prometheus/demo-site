@@ -9,5 +9,8 @@ demo
 [grafana]
 demo
 
+[exporters]
+demo
+
 [web]
 demo

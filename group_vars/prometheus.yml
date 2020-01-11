@@ -54,7 +54,7 @@ prometheus_scrape_configs:
     module: [http_2xx]
   static_configs:
   - targets:
-    - "http://{{ ansible_host }}:9100"
+    - "http://localhost:9100"
   relabel_configs:
   - source_labels: [__address__]
     target_label: __param_target

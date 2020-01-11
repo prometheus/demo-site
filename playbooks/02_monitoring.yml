@@ -10,7 +10,6 @@
   hosts: prometheus
   roles:
   - cloudalchemy.blackbox-exporter
-  - cloudalchemy.snmp-exporter
   - cloudalchemy.prometheus
   - cloudalchemy.alertmanager
   tags:
