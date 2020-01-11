@@ -14,8 +14,10 @@ jobs:
     executor: golang
     steps:
     - run: go get -u github.com/prometheus/client_golang/examples/random
-    - store_artifacts:
-        path: /go/bin
+    - persist_to_workspace:
+        root: /
+        paths:
+        - go/bin
 
   test:
     executor: python
@@ -39,9 +41,6 @@ jobs:
 
   deploy:
     executor: python
-    # environment:
-    # - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
-    # - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
     - checkout
     - add_ssh_keys:
@@ -81,7 +80,9 @@ workflows:
             only:
             - prometheus
     jobs:
+    - build
     - test
     - deploy:
         requires:
+        - build
         - test
