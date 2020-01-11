@@ -5,8 +5,6 @@ port_mapping:
   prometheus: 9090
   alertmanager: 9093
   node: 9100
-  blackbox: 9115
-  snmp: 9116
 
 caddy_update: true
 caddy_systemd_capabilities_enabled: true
