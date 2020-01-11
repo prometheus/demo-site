@@ -1,6 +1,6 @@
 # Prometheus demo monitoring site
 
-[![Build Status](https://travis-ci.org/prometheus/demo-site.svg?branch=master)](https://travis-ci.org/prometheus/demo-site)
+[![Build Status](https://circleci.com/gh/prometheus/demo-site.svg?style=svg)](https://circleci.com/gh/prometheus/demo-site)
 [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=prometheus)
 
