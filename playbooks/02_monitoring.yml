@@ -23,50 +23,42 @@
   tags:
     - grafana
 
-- name: Setup random number exporter
-  hosts: web
-  tasks:
-  - name: Locally build random_exporter
-    shell: |
-      go get -u github.com/prometheus/client_golang/examples/random
-      mv $GOPATH/bin/random /tmp/random_exporter
-    args:
-      creates: /tmp/random_exporter
-    delegate_to: localhost
-    run_once: true
-  - name: Copy random_exporter binary
-    copy:
-      src: /tmp/random_exporter
-      dest: /usr/local/bin/random_exporter
-      owner: root
-      group: root
-      mode: 0755
-    notify: random_exporter restart
-  - name: Copy systemd service file
-    copy:
-      dest: /etc/systemd/system/random_exporter.service
-      mode: 0644
-      content: "{{ random_exporter_systemd_service }}"
-    notify: random_exporter restart
-  handlers:
-  - name: random_exporter restart
-    systemd:
-      name: random_exporter
-      state: started
-      daemon_reload: true
-      enabled: true
-  vars:
-    random_exporter_systemd_service: |
-      # Ansible managed
-      [Unit]
-      Description=Random Metrics Exporter
-      After=network.target
-      [Service]
-      Type=simple
-      User=nobody
-      Group=nogroup
-      ExecStart=/usr/local/bin/random_exporter -listen-address=:8999
-      SyslogIdentifier=random_exporter
-      Restart=always
-      [Install]
-      WantedBy=multi-user.target
+#- name: Setup random number exporter
+#  hosts: all
+#  tasks:
+#  - name: Copy random_exporter binary
+#    copy:
+#      src: random
+#      dest: /usr/local/bin/random_exporter
+#      owner: root
+#      group: root
+#      mode: 0755
+#    notify: random_exporter restart
+#  - name: Copy systemd service file
+#    copy:
+#      dest: /etc/systemd/system/random_exporter.service
+#      mode: 0644
+#      content: "{{ random_exporter_systemd_service }}"
+#    notify: random_exporter restart
+#  handlers:
+#  - name: random_exporter restart
+#    systemd:
+#      name: random_exporter
+#      state: started
+#      daemon_reload: true
+#      enabled: true
+#  vars:
+#    random_exporter_systemd_service: |
+#      # Ansible managed
+#      [Unit]
+#      Description=Random Metrics Exporter
+#      After=network.target
+#      [Service]
+#      Type=simple
+#      User=nobody
+#      Group=nogroup
+#      ExecStart=/usr/local/bin/random_exporter -listen-address=:8999
+#      SyslogIdentifier=random_exporter
+#      Restart=always
+#      [Install]
+#      WantedBy=multi-user.target
