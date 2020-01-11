@@ -9,8 +9,8 @@
       path: "{{ item }}"
       state: directory
     with_items:
-      - /var/www/demo
-      - /var/www/demo/img
+    - /var/www/demo
+    - /var/www/demo/img
   - name: Ensure portal site exists
     copy:
       src: index.html
@@ -20,6 +20,5 @@
       src: "img/{{ item }}"
       dest: "/var/www/demo/img/{{ item }}"
     with_items:
-      - logo.png
-      - digitalocean.png
-
+    - logo.png
+    - digitalocean.png

@@ -20,8 +20,8 @@
       limit_item: nofile
       value: 16384
     with_items:
-      - soft
-      - hard
+    - soft
+    - hard
   vars:
     ssh_permit_root_login: "without-password"
 

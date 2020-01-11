@@ -5,77 +5,88 @@ executors:
   python:
     docker:
     - image: circleci/python:latest
+  golang:
+    docker:
+    - image:  circleci/golang:1.13
 
 jobs:
+  build:
+    executor: golang
+    steps:
+    - run: echo "build"
+
   test:
     executor: python
     environment:
-      - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
-      - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
+    - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
+    - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - deps-{{ checksum "requirements.txt" }}
-      - run:
-          name: Install Dependencies
-          command: |
-              python3 -m venv env
-              . env/bin/activate
-              pip install ansible
-              pip install -r requirements.txt
-      - save_cache:
-          key: deps-{{ checksum "requirements.txt" }}
-          paths:
-            - "env"
-      - run:
-          name: Run Tests
-          command: |
-              . env/bin/activate
-              ansible-galaxy install -r roles/requirements.yml
-              ansible-playbook --syntax-check site.yml
-              ansible-lint site.yml || echo "Linting problems found"
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+    - checkout
+    - restore_cache:
+        keys:
+        - deps-{{ checksum "requirements.txt" }}
+    - run:
+        name: Install Dependencies
+        command: |
+            python3 -m venv env
+            . env/bin/activate
+            pip install ansible
+            pip install -r requirements.txt
+    - save_cache:
+        key: deps-{{ checksum "requirements.txt" }}
+        paths:
+        - "env"
+    - run:
+        name: Run Tests
+        command: |
+            . env/bin/activate
+            ansible-galaxy install -r roles/requirements.yml
+            ansible-playbook --syntax-check site.yml
+            ansible-lint site.yml || echo "Linting problems found"
+    - store_artifacts:
+        path: test-reports
+        destination: test-reports
 
   deploy:
     executor: python
     steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "46:a1:bb:55:6e3a:a5:2f:ea:13:46:ae:24:f0:19"
-      - restore_cache:
-          keys:
-            - deps-{{ checksum "requirements.txt" }}
-      - deploy:
-          name: Deploy to production
-          command: |
-            . env/bin/activate
-            ./deploy.sh
+    - checkout
+    - add_ssh_keys:
+        fingerprints:
+        - "46:a1:bb:55:6e3a:a5:2f:ea:13:46:ae:24:f0:19"
+    - restore_cache:
+        keys:
+        - deps-{{ checksum "requirements.txt" }}
+    - deploy:
+        name: Deploy to production
+        command: |
+          . env/bin/activate
+          ./deploy.sh
 
 workflows:
   version: 2
   commit:
     jobs:
-      - test
-      - deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only: master
+    - build
+    - test
+    - deploy:
+        requires:
+        - build
+        - test
+        filters:
+          branches:
+            only: prometheus
+
   nightly:
     triggers:
-      - schedule:
-          cron: "0 14 * * *"
-          filters:
-            branches:
-              only:
-                - master
+    - schedule:
+        cron: "0 14 * * *"
+        filters:
+          branches:
+            only:
+            - prometheus
     jobs:
-      - test
-      - deploy:
-          requires:
-            - test
+    - test
+    - deploy:
+        requires:
+        - test
