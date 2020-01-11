@@ -70,7 +70,7 @@ workflows:
         - test
         filters:
           branches:
-            only: prometheus
+            only: master
 
   nightly:
     triggers:
@@ -79,7 +79,7 @@ workflows:
         filters:
           branches:
             only:
-            - prometheus
+            - master
     jobs:
     - test
     - deploy:
