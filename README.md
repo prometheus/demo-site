@@ -1,13 +1,13 @@
-# Prometheus demo monitoring site
+# Prometheus monitoring demo site
 
 [![Build Status](https://circleci.com/gh/prometheus/demo-site.svg?style=svg)](https://circleci.com/gh/prometheus/demo-site)
-[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/license-Apache%20License-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
 [![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=prometheus)
 
 ## [demo.prometheus.io](https://demo.prometheus.io)
 
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
-Site is provisioned with ansible running every day and on almost all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
+Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
 
 Have a look at configuration files in [group_vars/](group_vars).
 
@@ -18,8 +18,6 @@ All applications should be running on their default ports.
 | App name          | Address (HTTP)                                       | Address (HTTPS)                                           |
 |-------------------|------------------------------------------------------|-----------------------------------------------------------|
 | node_exporter     | [demo.prometheus.io:9100][node_exporter_http]     | [node.demo.prometheus.io][node_exporter_https]         |
-| snmp_exporter     | [demo.prometheus.io:9116][snmp_exporter_http]     | [snmp.demo.prometheus.io][snmp_exporter_https]         |
-| blackbox_exporter | [demo.prometheus.io:9115][blackbox_exporter_http] | [blackbox.demo.prometheus.io][blackbox_exporter_https] |
 | prometheus        | [demo.prometheus.io:9090][prometheus_http]        | [prometheus.demo.prometheus.io][prometheus_https]      |
 | alertmanager      | [demo.prometheus.io:9093][alertmanager_http]      | [alertmanager.demo.prometheus.io][alertmanager_https]  |
 | grafana           | [demo.prometheus.io:3000][grafana_http]           | [grafana.demo.prometheus.io][grafana_https]            |
@@ -79,12 +77,6 @@ demo site is deployed using [Cloud Alchemy](https://github.com/cloudalchemy) ans
 
 [node_exporter_http]: http://demo.prometheus.io:9100
 [node_exporter_https]: https://node.demo.prometheus.io
-
-[snmp_exporter_http]: http://demo.prometheus.io:9116
-[snmp_exporter_https]: https://snmp.demo.prometheus.io
-
-[blackbox_exporter_http]: http://demo.prometheus.io:9115
-[blackbox_exporter_https]: https://blackbox.demo.prometheus.io
 
 [prometheus_http]: http://demo.prometheus.io:9090
 [prometheus_https]: https://prometheus.demo.prometheus.io

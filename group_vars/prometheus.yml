@@ -1,4 +1,10 @@
 ---
+random_exporter_addresses:
+- "{{ ansible_host }}:8999"
+- "{{ ansible_host }}:8998"
+- "{{ ansible_host }}:8997"
+- "{{ ansible_host }}:8996"
+
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "31d"
 
@@ -19,6 +25,8 @@ prometheus_targets:
     - "{{ ansible_host }}:9093"
     labels:
       env: demo
+  random:
+  - targets: "{{ random_exporter_addresses }}"
 
 prometheus_scrape_configs:
 - job_name: "prometheus"
@@ -28,9 +36,9 @@ prometheus_scrape_configs:
     - "{{ ansible_host }}:9090"
 - job_name: "random"
   metrics_path: "/metrics"
-  static_configs:
-  - targets:
-    - "{{ ansible_host }}:8999"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/random.yml"
 - job_name: "caddy"
   metrics_path: "/metrics"
   static_configs:
