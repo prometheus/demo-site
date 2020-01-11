@@ -13,7 +13,9 @@ jobs:
   build:
     executor: golang
     steps:
-    - run: echo "build"
+    - run: go get -u github.com/prometheus/client_golang/examples/random
+    - store_artifacts:
+        path: /go/bin
 
   test:
     executor: python
@@ -45,6 +47,9 @@ jobs:
     - add_ssh_keys:
         fingerprints:
         - "46:a1:bb:55:6e3a:a5:2f:ea:13:46:ae:24:f0:19"
+    - attach_workspace:
+        at: .
+    - run: cp -v go/bin/random playbooks/files/random
     - restore_cache:
         keys:
         - deps-{{ checksum "requirements.txt" }}
