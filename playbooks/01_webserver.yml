@@ -15,10 +15,7 @@
     copy:
       src: index.html
       dest: /var/www/demo/index.html
-  - name: Copy images
+  - name: Copy digitalocean image
     copy:
-      src: "img/{{ item }}"
-      dest: "/var/www/demo/img/{{ item }}"
-    with_items:
-    - logo.png
-    - digitalocean.png
+      src: "https://github.com/prometheus/demo-site/raw/prometheus/playbooks/files/img/digitalocean.png"
+      dest: "/var/www/demo/img/digitalocean.png"
