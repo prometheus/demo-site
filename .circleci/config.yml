@@ -1,0 +1,87 @@
+---
+version: 2.1
+
+executors:
+  python:
+    docker:
+    - image: circleci/python:latest
+  golang:
+    docker:
+    - image: circleci/golang:1.13
+
+jobs:
+  build:
+    executor: golang
+    steps:
+    - run: go get -u github.com/prometheus/client_golang/examples/random
+    - store_artifacts:
+        path: /go/bin
+
+  test:
+    executor: python
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - deps-{{ checksum "requirements.txt" }}
+    - run: mkdir -p ~/.cache/pip
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+    - save_cache:
+        key: deps-{{ checksum "requirements.txt" }}
+        paths:
+        - ~/.cache/pip
+    - run: ansible-galaxy install -r roles/requirements.yml
+    - run: ansible-playbook --syntax-check site.yml
+    - run: ansible-lint site.yml
+    - store_artifacts:
+        path: test-reports
+        destination: test-reports
+
+  deploy:
+    executor: python
+    # environment:
+    # - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
+    # - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
+    steps:
+    - checkout
+    - add_ssh_keys:
+        fingerprints:
+        - "46:a1:bb:55:6e:cd:3a:a5:2f:ea:13:46:ae:24:f0:19"
+    - attach_workspace:
+        at: .
+    - run: cp -v go/bin/random playbooks/files/random
+    - restore_cache:
+        keys:
+        - deps-{{ checksum "requirements.txt" }}
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+    - deploy:
+        name: Deploy to production
+        command: ./deploy.sh
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+    - build
+    - test
+    - deploy:
+        requires:
+        - build
+        - test
+        filters:
+          branches:
+            only: master
+
+  nightly:
+    triggers:
+    - schedule:
+        cron: "0 14 * * *"
+        filters:
+          branches:
+            only:
+            - master
+    jobs:
+    - test
+    - deploy:
+        requires:
+        - test

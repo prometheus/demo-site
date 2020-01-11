@@ -1,0 +1,7 @@
+---
+exclude_paths:
+- roles/
+
+skip_list:
+- '204'
+- '602'

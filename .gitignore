@@ -3,8 +3,11 @@
 *.idea
 .molecule
 .cache
+.pip-cache
 __pycache__/
 *.retry
 roles/*
 !roles/requirements.yml
 ara*
+.vault-password
+playbooks/files/random

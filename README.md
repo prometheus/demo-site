@@ -1,28 +1,38 @@
-# Cloud Alchemy demo monitoring site
+# Prometheus demo monitoring site
 
-[![Build Status](https://travis-ci.org/cloudalchemy/demo-site.svg?branch=master)](https://travis-ci.org/cloudalchemy/demo-site)
+[![Build Status](https://travis-ci.org/prometheus/demo-site.svg?branch=master)](https://travis-ci.org/prometheus/demo-site)
 [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
-[![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=cloudalchemy)
+[![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=prometheus)
 
-## [demo.cloudalchemy.org](https://demo.cloudalchemy.org)
+## [demo.prometheus.io](https://demo.prometheus.io)
 
-This repository provides an integration testing suite for our ansible roles as well as a demo site for [grafana](https://github.com/grafana/grafana), [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager) and [node_exporter](https://github.com/prometheus/node_exporter) (possibly more in the future).
-Site is provisioned with ansible running every day and on almost all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/cloudalchemy/demo-site) or visit [ARA Records Ansible page](https://demo.cloudalchemy.org/ara).
+This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
+Site is provisioned with ansible running every day and on almost all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
 
-Have a look at the configuration file [group_vars/all/vars](group_vars/all/vars).
+Have a look at configuration files in [group_vars/](group_vars).
 
 ## Applications
 
 All applications should be running on their default ports.
 
-| App name          | Address                                                         | Status |  Uptime  |
-|-------------------|-----------------------------------------------------------------|--------|----------|
-| node_exporter     | [demo.cloudalchemy.org:9100](http://demo.cloudalchemy.org:9100) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739001-48f8ed6c3aa6f23da1ec11e2.svg)](http://demo.cloudalchemy.org:9100) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739001-48f8ed6c3aa6f23da1ec11e2.svg)](http://demo.cloudalchemy.org:9100) |
-| snmp_exporter     | [demo.cloudalchemy.org:9116](http://demo.cloudalchemy.org:9116) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739006-f784bd36e07d328bfacb6d17.svg)](http://demo.cloudalchemy.org:9116) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739006-f784bd36e07d328bfacb6d17.svg)](http://demo.cloudalchemy.org:9116) |
-| blackbox_exporter | [demo.cloudalchemy.org:9115](http://demo.cloudalchemy.org:9115) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739004-8447f4012a129e08df4db247.svg)](http://demo.cloudalchemy.org:9115) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739004-8447f4012a129e08df4db247.svg)](http://demo.cloudalchemy.org:9115) |
-| prometheus        | [demo.cloudalchemy.org:9090](http://demo.cloudalchemy.org:9090) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739002-6049a4d9177bdf92d7dce7d9.svg)](http://demo.cloudalchemy.org:9190) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739002-6049a4d9177bdf92d7dce7d9.svg)](http://demo.cloudalchemy.org:9090) |
-| alertmanager      | [demo.cloudalchemy.org:9093](http://demo.cloudalchemy.org:9093) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739005-687f76da143b768d378502f8.svg)](http://demo.cloudalchemy.org:9193) |
-| grafana           | [demo.cloudalchemy.org:3000](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) | [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m779739003-21ce43d565a95d31564b438d.svg)](http://demo.cloudalchemy.org:3000) |
+| App name          | Address (HTTP)                                       | Address (HTTPS)                                           |
+|-------------------|------------------------------------------------------|-----------------------------------------------------------|
+| node_exporter     | [demo.prometheus.io:9100][node_exporter_http]     | [node.demo.prometheus.io][node_exporter_https]         |
+| snmp_exporter     | [demo.prometheus.io:9116][snmp_exporter_http]     | [snmp.demo.prometheus.io][snmp_exporter_https]         |
+| blackbox_exporter | [demo.prometheus.io:9115][blackbox_exporter_http] | [blackbox.demo.prometheus.io][blackbox_exporter_https] |
+| prometheus        | [demo.prometheus.io:9090][prometheus_http]        | [prometheus.demo.prometheus.io][prometheus_https]      |
+| alertmanager      | [demo.prometheus.io:9093][alertmanager_http]      | [alertmanager.demo.prometheus.io][alertmanager_https]  |
+| grafana           | [demo.prometheus.io:3000][grafana_http]           | [grafana.demo.prometheus.io][grafana_https]            |
+
+## Important notice
+
+Before running, golang is required to be installed on deployer machine (neccessary to install random_exporter).
+
+Most services can be accessed in two ways (links in [Applications](#Applications) section. As an example, prometheus can be accessed via:
+  - **http**://demo.prometheus.io:9090 - default way
+  - **https**://prometheus.prometheus.io - workaround which in backgroud communicates with prometheus via insecure, "default" channel mentioned above
+
+This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13).
 
 ## Run yourself
 
@@ -37,19 +47,50 @@ First of all you need to configure your inventory, ours is located in [`hosts`](
 demo
 ```
 
-Accordingly you can exclude grafana, prometheus, or influxdb.
+Accordingly you can exclude grafana, prometheus.
 
 #### Change passwords
 
-For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/all/vault`](group_vars/all/vault) with following content:
+For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/grafana/vault`](group_vars/grafana/vault) with following content:
 
 ```
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
-vault_influxdb_password <<INSERT_YOUR_INFLUXDB_PASSWORD>>
 ```
 
-You need to specify both even if you don't use grafana nor influxdb. You can look over [`group_vars/all/vault`](group_vars/all/vars) to find why.
+#### Run as usual Ansible playbook
+
+```bash
+# Download roles
+ansible-galaxy install -r roles/requirements.yml
+
+# Run playbook
+ansible-playbook site.yml
+# or when using vault encrypted variables
+ansible-playbook --vault-id @prompt site.yml
+```
 
 # 
 
+demo site is deployed using [Cloud Alchemy](https://github.com/cloudalchemy) ansible roles.
+
 [![DigitalOcean](https://snapshooter.io/powered_by_digital_ocean.png)](https://digitalocean.com)
+
+
+
+[node_exporter_http]: http://demo.prometheus.io:9100
+[node_exporter_https]: https://node.demo.prometheus.io
+
+[snmp_exporter_http]: http://demo.prometheus.io:9116
+[snmp_exporter_https]: https://snmp.demo.prometheus.io
+
+[blackbox_exporter_http]: http://demo.prometheus.io:9115
+[blackbox_exporter_https]: https://blackbox.demo.prometheus.io
+
+[prometheus_http]: http://demo.prometheus.io:9090
+[prometheus_https]: https://prometheus.demo.prometheus.io
+
+[alertmanager_http]: http://demo.prometheus.io:9093
+[alertmanager_https]: https://alertmanager.demo.prometheus.io
+
+[grafana_http]: http://demo.prometheus.io:3000
+[grafana_https]: https://grafana.demo.prometheus.io

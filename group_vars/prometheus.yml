@@ -1,0 +1,64 @@
+---
+prometheus_web_external_url: "http://{{ ansible_host }}:9090"
+prometheus_storage_retention: "31d"
+
+prometheus_alertmanager_config:
+- scheme: http
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:9093"
+
+prometheus_targets:
+  node:
+  - targets:
+      "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '$', ':9100') | list }}"
+    labels:
+      env: demo
+  alertmanager:
+  - targets:
+    - "{{ ansible_host }}:9093"
+    labels:
+      env: demo
+
+prometheus_scrape_configs:
+- job_name: "prometheus"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:9090"
+- job_name: "random"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:8999"
+- job_name: "caddy"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "localhost:9180"
+- job_name: "grafana"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:3000"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/node.yml"
+- job_name: "alertmanager"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/alertmanager.yml"
+- job_name: 'blackbox'
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  static_configs:
+  - targets:
+    - "http://localhost:9100"
+  relabel_configs:
+  - source_labels: [__address__]
+    target_label: __param_target
+  - source_labels: [__param_target]
+    target_label: instance
+  - target_label: __address__
+    replacement: 127.0.0.1:9115  # Blackbox exporter.

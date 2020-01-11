@@ -1,0 +1,27 @@
+---
+extends: default
+ignore: |
+  secrets.yml
+  *.sh
+  *.md
+  roles/cloudalchemy.*
+  roles/mongrelion.docker
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+  comments:
+    level: error
+  document-start:
+    level: error
+  indentation:
+    spaces: 2
+    indent-sequences: false
+  line-length:
+    max: 160
+    level: error
+  truthy:
+    level: error
