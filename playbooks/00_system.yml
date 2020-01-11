@@ -5,6 +5,7 @@
   tasks:
   - name: Install python
     raw: "apt update && apt install -y python3"
+    changed_when: false
 
 - name: Apply security restrictions
   hosts: all

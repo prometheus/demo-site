@@ -7,7 +7,7 @@ executors:
     - image: circleci/python:latest
   golang:
     docker:
-    - image:  circleci/golang:1.13
+    - image: circleci/golang:1.13
 
 jobs:
   build:
@@ -17,38 +17,29 @@ jobs:
 
   test:
     executor: python
-    environment:
-    - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
-    - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
     - checkout
     - restore_cache:
         keys:
         - deps-{{ checksum "requirements.txt" }}
-    - run:
-        name: Install Dependencies
-        command: |
-            python3 -m venv env
-            . env/bin/activate
-            pip install ansible
-            pip install -r requirements.txt
+    - run: mkdir -p ~/.cache/pip
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
     - save_cache:
         key: deps-{{ checksum "requirements.txt" }}
         paths:
-        - "env"
-    - run:
-        name: Run Tests
-        command: |
-            . env/bin/activate
-            ansible-galaxy install -r roles/requirements.yml
-            ansible-playbook --syntax-check site.yml
-            ansible-lint site.yml || echo "Linting problems found"
+        - ~/.cache/pip
+    - run: ansible-galaxy install -r roles/requirements.yml
+    - run: ansible-playbook --syntax-check site.yml
+    - run: ansible-lint site.yml
     - store_artifacts:
         path: test-reports
         destination: test-reports
 
   deploy:
     executor: python
+    # environment:
+    # - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
+    # - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
     - checkout
     - add_ssh_keys:
@@ -57,11 +48,10 @@ jobs:
     - restore_cache:
         keys:
         - deps-{{ checksum "requirements.txt" }}
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
     - deploy:
         name: Deploy to production
-        command: |
-          . env/bin/activate
-          ./deploy.sh
+        command: ./deploy.sh
 
 workflows:
   version: 2
