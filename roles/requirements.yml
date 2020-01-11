@@ -11,3 +11,5 @@
   version: v2.1.0
 - name: dev-sec.ssh-hardening
 - name: dev-sec.os-hardening
+- name: jnv.unattended-upgrades
+  version: v1.7.1

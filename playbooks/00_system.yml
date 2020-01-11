@@ -24,3 +24,11 @@
       - hard
   vars:
     ssh_permit_root_login: "without-password"
+
+- name: Configure automatic updates
+  hosts: all
+  roles:
+  - jnv.unattended-upgrades
+  vars:
+    unattended_automatic_reboot_time: "02:00"
+    unattended_update_days: 1
