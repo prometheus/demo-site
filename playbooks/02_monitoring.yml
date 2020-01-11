@@ -22,7 +22,7 @@
   tags:
   - grafana
 
-- name: Setup random number exporter
+- name: Setup random exporters
   hosts: all
   tasks:
   - name: Copy random_exporter binary
@@ -35,29 +35,28 @@
     notify: random_exporter restart
   - name: Copy systemd service file
     copy:
-      dest: /etc/systemd/system/random_exporter.service
+      dest: "/etc/systemd/system/random_exporter@.service"
       mode: 0644
-      content: "{{ random_exporter_systemd_service }}"
+      content: |
+        # Ansible managed
+        [Unit]
+        Description=Random Metrics Exporter on %i
+        After=network.target
+        [Service]
+        Type=simple
+        User=nobody
+        Group=nogroup
+        ExecStart=/usr/local/bin/random_exporter -listen-address=:%i
+        SyslogIdentifier=random_exporter
+        Restart=always
+        [Install]
+        WantedBy=multi-user.target
     notify: random_exporter restart
   handlers:
   - name: random_exporter restart
     systemd:
-      name: random_exporter
+      name: "random_exporter@{{ item }}"
       state: started
       daemon_reload: true
       enabled: true
-  vars:
-    random_exporter_systemd_service: |
-      # Ansible managed
-      [Unit]
-      Description=Random Metrics Exporter
-      After=network.target
-      [Service]
-      Type=simple
-      User=nobody
-      Group=nogroup
-      ExecStart=/usr/local/bin/random_exporter -listen-address=:8999
-      SyslogIdentifier=random_exporter
-      Restart=always
-      [Install]
-      WantedBy=multi-user.target
+    with_items: "{{ random_exporter_addresses }}"
