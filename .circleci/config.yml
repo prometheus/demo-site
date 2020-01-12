@@ -20,6 +20,31 @@ jobs:
         paths:
         - go/bin
 
+  mixins:
+    executor: golang
+    steps:
+    - run: go get -u github.com/google/go-jsonnet/cmd/jsonnet
+    - run: go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+    - run: git clone --depth 1 https://github.com/prometheus/prometheus.git
+    - run: |
+        cd prometheus/documentation/prometheus-mixin
+        jb install
+        make prometheus_alerts.yaml
+    - run: git clone --depth 1 https://github.com/prometheus/node_exporter.git
+    - run: |
+        cd node_exporter/docs/node-mixin
+        jb install
+        make node_alerts.yaml node_rules.yaml
+    - run: |
+        mkdir rules
+        cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
+        # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
+        for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
+    - persist_to_workspace:
+        root: .
+        paths:
+        - rules/
+
   test:
     executor: python
     steps:
@@ -50,6 +75,7 @@ jobs:
     - attach_workspace:
         at: .
     - run: cp -v go/bin/random playbooks/files/random
+    - run: cp -rv rules playbooks/files/
     - restore_cache:
         keys:
         - deps-{{ checksum "requirements.txt" }}
@@ -63,6 +89,7 @@ workflows:
   commit:
     jobs:
     - build
+    - mixins
     - test
     - deploy:
         requires:
@@ -82,8 +109,10 @@ workflows:
             - master
     jobs:
     - build
+    - mixins
     - test
     - deploy:
         requires:
         - build
         - test
+        - mixins

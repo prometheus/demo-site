@@ -11,3 +11,5 @@ roles/*
 ara*
 .vault-password
 playbooks/files/random
+playbooks/files/rules/
+playbooks/files/dashboards/
