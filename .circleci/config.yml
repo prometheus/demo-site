@@ -42,14 +42,15 @@ jobs:
         jb install
         make node_alerts.yaml node_rules.yaml
     - run: |
-        mkdir rules
-        cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
+        sudo mkdir /rules
+        sudo cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml /rules/
         # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
-        for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
+        for i in /rules/*.yaml; do sudo mv -v $i ${i%yaml}rules; done
+    - run: ls -l /rules/
     - persist_to_workspace:
-        root: .
+        root: /
         paths:
-        - rules/
+        - rules
 
   test:
     executor: python
