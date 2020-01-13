@@ -25,12 +25,18 @@ jobs:
     steps:
     - run: go get -u github.com/google/go-jsonnet/cmd/jsonnet
     - run: go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-    - run: git clone --depth 1 https://github.com/prometheus/prometheus.git
+    - run: |
+        git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
+        cd prometheus
+        git checkout master -- documentation/prometheus-mixin
     - run: |
         cd prometheus/documentation/prometheus-mixin
         jb install
         make prometheus_alerts.yaml
-    - run: git clone --depth 1 https://github.com/prometheus/node_exporter.git
+    - run: |
+        git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/node_exporter.git node_exporter
+        cd node_exporter
+        git checkout master -- docs/node-mixin
     - run: |
         cd node_exporter/docs/node-mixin
         jb install
