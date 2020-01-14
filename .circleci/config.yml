@@ -32,7 +32,7 @@ jobs:
     - run: |
         cd prometheus/documentation/prometheus-mixin
         jb install
-        make prometheus_alerts.yaml
+        make prometheus_alerts.yaml dashboards_out
     - run: |
         git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/node_exporter.git node_exporter
         cd node_exporter
@@ -40,9 +40,10 @@ jobs:
     - run: |
         cd node_exporter/docs/node-mixin
         jb install
-        make node_alerts.yaml node_rules.yaml
+        make node_alerts.yaml node_rules.yaml dashboards_out
     - run: |
-        mkdir rules
+        mkdir rules dashboards
+        cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
         cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
         # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
         for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
@@ -50,6 +51,7 @@ jobs:
         root: .
         paths:
         - rules/
+        - dashboards/
 
   test:
     executor: python
@@ -81,7 +83,7 @@ jobs:
     - attach_workspace:
         at: .
     - run: cp -v go/bin/random playbooks/files/random
-    - run: cp -rv rules playbooks/files/
+    - run: cp -rv rules dashboards playbooks/files/
     - restore_cache:
         keys:
         - deps-{{ checksum "requirements.txt" }}
