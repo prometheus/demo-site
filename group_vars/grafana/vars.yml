@@ -14,13 +14,4 @@ grafana_datasources:
   access: "proxy"
   url: "http://{{ ansible_host }}:9090"
   isDefault: true
-grafana_dashboards:
-- dashboard_id: '1860'
-  revision_id: '12'
-  datasource: '{{ grafana_datasources.0.name }}'
-- dashboard_id: '3662'
-  revision_id: '2'
-  datasource: '{{ grafana_datasources.0.name }}'
-- dashboard_id: '4271'
-  revision_id: '4'
-  datasource: '{{ grafana_datasources.0.name }}'
+grafana_dashboards: []
