@@ -52,11 +52,17 @@
         [Install]
         WantedBy=multi-user.target
     notify: random_exporter restart
+  - name: Ensure random_exporters are enabled
+    systemd:
+      name: "random_exporter@{{ item }}"
+      state: started
+      enabled: true
+    with_items: "{{ random_exporter_addresses }}"
   handlers:
   - name: random_exporter restart
     systemd:
       name: "random_exporter@{{ item }}"
-      state: started
+      state: restarted
       daemon_reload: true
       enabled: true
     with_items: "{{ random_exporter_addresses }}"
