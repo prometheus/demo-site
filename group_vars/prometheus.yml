@@ -8,6 +8,8 @@ random_exporter_addresses:
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "31d"
 
+prometheus_version: 2.16.0-rc.0
+
 prometheus_alertmanager_config:
 - scheme: http
   static_configs:
