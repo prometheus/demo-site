@@ -55,6 +55,17 @@ For security measures we encrypted some of our passwords, but it is easy to use 
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
 ```
 
+#### Download the 'random' exporter binary
+
+You will have to manually run `go` command to download & copy the [`random`](https://github.com/prometheus/client_golang/tree/master/examples/random) exporter binary to [`playbooks/files`](playbooks/files) directory.
+
+- The binary will be downloaded at `GOPATH` location. The value of `GOPATH` can be found by running `go env|grep GOPATH` command on your system.
+
+```
+go get -u github.com/prometheus/client_golang/examples/random
+cp <GOPATH>/bin/random /path/to/demo-site/playbooks/files/
+```
+
 #### Run as usual Ansible playbook
 
 ```bash
