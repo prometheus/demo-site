@@ -1,5 +1,5 @@
 ---
-letsencrypt_email: prometheus-team@googlegroups.com
+# letsencrypt_email: changeme@example.com
 port_mapping:
   grafana: 3000
   prometheus: 9090
