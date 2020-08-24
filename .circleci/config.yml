@@ -7,7 +7,7 @@ executors:
     - image: circleci/python:latest
   golang:
     docker:
-    - image: circleci/golang:1.13
+    - image: circleci/golang:1.15
 
 jobs:
   build:
