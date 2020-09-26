@@ -60,7 +60,7 @@ prometheus_scrape_configs:
   metrics_path: "/metrics"
   static_configs:
   - targets:
-    - "localhost:9180"
+    - "localhost:2019"
 - job_name: "grafana"
   static_configs:
   - targets:
