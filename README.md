@@ -24,11 +24,11 @@ All applications should be running on their default ports.
 
 ## Important notice
 
-Before running, golang is required to be installed on deployer machine (neccessary to install random_exporter).
+Before running, golang is required to be installed on deployer machine (necessary to install random_exporter).
 
 Most services can be accessed in two ways (links in [Applications](#Applications) section. As an example, prometheus can be accessed via:
   - **http**://demo.do.prometheus.io:9090 - default way
-  - **https**://prometheus.do.prometheus.io - workaround which in backgroud communicates with prometheus via insecure, "default" channel mentioned above
+  - **https**://prometheus.do.prometheus.io - workaround which in background communicates with prometheus via insecure, "default" channel mentioned above
 
 This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13).
 
