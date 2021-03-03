@@ -7,7 +7,7 @@ executors:
     - image: circleci/python:latest
   golang:
     docker:
-    - image: circleci/golang:1.15
+    - image: circleci/golang:1.16
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
     - run: |
         git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
         cd prometheus
-        git checkout master -- documentation/prometheus-mixin
+        git checkout main -- documentation/prometheus-mixin
     - run: |
         cd prometheus/documentation/prometheus-mixin
         jb install
