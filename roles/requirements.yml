@@ -1,5 +1,5 @@
 ---
-- name: cloudalchemy.node-exporter
+- name: cloudalchemy.node_exporter
 - name: cloudalchemy.snmp-exporter
 - name: cloudalchemy.blackbox-exporter
 - name: cloudalchemy.prometheus

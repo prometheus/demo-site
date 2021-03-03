@@ -2,7 +2,7 @@
 - name: Deploy node_exporter
   hosts: all
   roles:
-  - cloudalchemy.node-exporter
+  - cloudalchemy.node_exporter
   tags:
   - node_exporter
 
