@@ -1,5 +1,5 @@
 ---
-alertmanager_external_url: "http://{{ ansible_host }}:9093"
+alertmanager_web_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
 alertmanager_receivers:
 - name: slack
