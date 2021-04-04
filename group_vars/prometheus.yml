@@ -8,6 +8,11 @@ random_exporter_addresses:
 prometheus_web_external_url: "http://{{ ansible_host }}:9090"
 prometheus_storage_retention: "31d"
 
+prometheus_config_flags_extra:
+  enable-feature:
+    - promql-at-modifier
+    - promql-negative-offset
+
 prometheus_alertmanager_config:
 - scheme: http
   static_configs:
