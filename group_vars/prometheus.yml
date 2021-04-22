@@ -35,6 +35,20 @@ prometheus_alert_rules:
       mechanisms that send a notification when this alert is not firing. For example the
       "DeadMansSnitch" integration in PagerDuty.'
     summary: 'Ensure entire alerting pipeline is functional'
+- alert: NodeCPUUtilizationHigh
+  expr: |
+    instance:node_cpu_utilisation:rate5m * 100
+      > ignoring (severity)
+    node_cpu_utilization_percent_threshold{severity="critical"}
+  for: 10m
+  labels:
+    severity: critical
+  annotations:
+    description: |
+      The node CPU utilization ({{ $value }}%) has been over threshold
+      ({{ query "node_cpu_utilization_percent_threshold{severity=\"critical\",instance=\"$labels.instance\"}"}}%)
+      for 10 minutes.
+    summary: Node CPU Utilization is high
 
 prometheus_targets:
   node:

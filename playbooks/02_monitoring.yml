@@ -66,3 +66,16 @@
       daemon_reload: true
       enabled: true
     with_items: "{{ random_exporter_addresses }}"
+
+- name: Add node textfile examples
+  hosts: all
+  tasks:
+  - name: Node CPU threshold
+    template:
+      src: node_metrics.prom.j2
+      dest: "{{ node_exporter_textfile_dir }}/node_metrics.prom"
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+  - node_exporter
