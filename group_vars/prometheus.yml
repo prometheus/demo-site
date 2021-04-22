@@ -44,10 +44,11 @@ prometheus_alert_rules:
   labels:
     severity: critical
   annotations:
-    description: |
+    description: '
       The node CPU utilization ({{ $value }}%) has been over threshold
       ({{ query "node_cpu_utilization_percent_threshold{severity=\"critical\",instance=\"$labels.instance\"}"}}%)
       for 10 minutes.
+      '
     summary: Node CPU Utilization is high
 
 prometheus_targets:
