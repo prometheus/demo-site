@@ -1,5 +1,5 @@
 # HELP node_cpu_utilization_percent_threshold The CPU utilization percent which triggers an alert.
 # TYPE node_cpu_utilization_percent_threshold gauge
-{% for severity, value in node_cpu_utilization_thresholds.items() -%}
+{% for severity, level in node_cpu_utilization_thresholds.items() -%}
 node_cpu_utilization_percent_threshold{severity="{{ severity }}"} {{ level }}
 {% endfor -%}

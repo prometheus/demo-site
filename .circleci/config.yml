@@ -73,6 +73,21 @@ jobs:
         path: test-reports
         destination: test-reports
 
+  test-deploy:
+    executor: python
+    steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - run: cp -v go/bin/random playbooks/files/random
+    - run: cp -rv rules dashboards playbooks/files/
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+    - run: ansible-galaxy install -f -r roles/requirements.yml
+    # Remove encrypted file so ansible won't try to decrypt it
+    - run: rm group_vars/grafana/vault
+    - run: |
+        ansible-playbook --check -e "{'grafana_security': {'admin_user': 'admin', admin_password: 'secret' }}" site.yml
+
   deploy:
     executor: python
     steps:
@@ -99,6 +114,14 @@ workflows:
     - build
     - mixins
     - test
+    - test-deploy:
+        requires:
+        - build
+        - mixins
+        filters:
+          branches:
+            ignore: master
+
     - deploy:
         requires:
         - build
