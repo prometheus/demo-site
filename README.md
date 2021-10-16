@@ -7,7 +7,7 @@
 ## [demo.do.prometheus.io](https://demo.do.prometheus.io)
 
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
-Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
+Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://app.circleci.com/pipelines/github/prometheus/demo-site).
 
 Have a look at configuration files in [group_vars/](group_vars).
 
