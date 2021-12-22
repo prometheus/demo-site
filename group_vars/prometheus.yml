@@ -1,9 +1,9 @@
 ---
 random_exporter_addresses:
-- "{{ ansible_host | default(inventory_hostname) }}:8999"
-- "{{ ansible_host | default(inventory_hostname) }}:8998"
-- "{{ ansible_host | default(inventory_hostname) }}:8997"
-- "{{ ansible_host | default(inventory_hostname) }}:8996"
+  - "{{ ansible_host | default(inventory_hostname) }}:8999"
+  - "{{ ansible_host | default(inventory_hostname) }}:8998"
+  - "{{ ansible_host | default(inventory_hostname) }}:8997"
+  - "{{ ansible_host | default(inventory_hostname) }}:8996"
 
 prometheus_web_external_url: "http://{{ ansible_host | default(inventory_hostname)  }}:9090"
 prometheus_storage_retention: "31d"
@@ -14,43 +14,43 @@ prometheus_config_flags_extra:
     - promql-negative-offset
 
 prometheus_alertmanager_config:
-- scheme: http
-  static_configs:
-  - targets:
-    - "{{ ansible_host | default(inventory_hostname) }}:9093"
+  - scheme: http
+    static_configs:
+      - targets:
+          - "{{ ansible_host | default(inventory_hostname) }}:9093"
 
 prometheus_alert_rules_files:
-- rules/*.rules
+  - rules/*.rules
 
 prometheus_alert_rules:
-- alert: Watchdog
-  expr: vector(1)
-  for: 10m
-  labels:
-    severity: warning
-  annotations:
-    description: 'This is an alert meant to ensure that the entire alerting pipeline is functional.
-      This alert is always firing, therefore it should always be firing in Alertmanager
-      and always fire against a receiver. There are integrations with various notification
-      mechanisms that send a notification when this alert is not firing. For example the
-      "DeadMansSnitch" integration in PagerDuty.'
-    summary: 'Ensure entire alerting pipeline is functional'
-- alert: NodeCPUUtilizationHigh
-  expr: |
-    instance:node_cpu_utilisation:rate5m * 100
-      > ignoring (severity)
-    node_cpu_utilization_percent_threshold{severity="critical"}
-  for: 10m
-  labels:
-    severity: critical
-  annotations:
-    description: |
-      {% raw -%}
-      The node CPU utilization ({{ $value }}%) has been over threshold
-      ({{ query "node_cpu_utilization_percent_threshold{severity=\"critical\",instance=\"$labels.instance\"}"}}%)
-      for 10 minutes.
-      {% endraw -%}
-    summary: Node CPU Utilization is high
+  - alert: Watchdog
+    expr: vector(1)
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: 'This is an alert meant to ensure that the entire alerting pipeline is functional.
+        This alert is always firing, therefore it should always be firing in Alertmanager
+        and always fire against a receiver. There are integrations with various notification
+        mechanisms that send a notification when this alert is not firing. For example the
+        "DeadMansSnitch" integration in PagerDuty.'
+      summary: 'Ensure entire alerting pipeline is functional'
+  - alert: NodeCPUUtilizationHigh
+    expr: |
+      instance:node_cpu_utilisation:rate5m * 100
+        > ignoring (severity)
+      node_cpu_utilization_percent_threshold{severity="critical"}
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: |
+        {% raw -%}
+        The node CPU utilization ({{ $value }}%) has been over threshold
+        ({{ query "node_cpu_utilization_percent_threshold{severity=\"critical\",instance=\"$labels.instance\"}"}}%)
+        for 10 minutes.
+        {% endraw -%}
+      summary: Node CPU Utilization is high
 
 # The following variable should be set to 'inventory_hostname' (in group_vars, host_vars, or elsewhere)
 # if you haven't specified 'ansible_host' in the inventory.
@@ -58,57 +58,57 @@ prometheus_hostnamelookupkey: "{{ prometheus_hostnamelookupkey | default('ansibl
 
 prometheus_targets:
   node:
-  - targets:
-      "{{ groups['all'] | map('extract', hostvars, [prometheus_hostnamelookupkey]) | map('regex_replace', '$', ':9100') | list }}"
-    labels:
-      env: demo
+    - targets:
+        "{{ groups['all'] | map('extract', hostvars, [prometheus_hostnamelookupkey]) | map('regex_replace', '$', ':9100') | list }}"
+      labels:
+        env: demo
   alertmanager:
-  - targets:
-    - "{{ ansible_host | default(inventory_hostname) }}:9093"
-    labels:
-      env: demo
+    - targets:
+        - "{{ ansible_host | default(inventory_hostname) }}:9093"
+      labels:
+        env: demo
   random:
-  - targets: "{{ random_exporter_addresses }}"
+    - targets: "{{ random_exporter_addresses }}"
 
 prometheus_scrape_configs:
-- job_name: "prometheus"
-  metrics_path: "/metrics"
-  static_configs:
-  - targets:
-    - "{{ ansible_host | default(inventory_hostname) }}:9090"
-- job_name: "random"
-  metrics_path: "/metrics"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/random.yml"
-- job_name: "caddy"
-  metrics_path: "/metrics"
-  static_configs:
-  - targets:
-    - "localhost:2019"
-- job_name: "grafana"
-  static_configs:
-  - targets:
-    - "{{ ansible_host | default(inventory_hostname) }}:3000"
-- job_name: "node"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/node.yml"
-- job_name: "alertmanager"
-  file_sd_configs:
-  - files:
-    - "/etc/prometheus/file_sd/alertmanager.yml"
-- job_name: 'blackbox'
-  metrics_path: /probe
-  params:
-    module: [http_2xx]
-  static_configs:
-  - targets:
-    - "http://localhost:9100"
-  relabel_configs:
-  - source_labels: [__address__]
-    target_label: __param_target
-  - source_labels: [__param_target]
-    target_label: instance
-  - target_label: __address__
-    replacement: 127.0.0.1:9115  # Blackbox exporter.
+  - job_name: "prometheus"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets:
+          - "{{ ansible_host | default(inventory_hostname) }}:9090"
+  - job_name: "random"
+    metrics_path: "/metrics"
+    file_sd_configs:
+      - files:
+          - "/etc/prometheus/file_sd/random.yml"
+  - job_name: "caddy"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets:
+          - "localhost:2019"
+  - job_name: "grafana"
+    static_configs:
+      - targets:
+          - "{{ ansible_host | default(inventory_hostname) }}:3000"
+  - job_name: "node"
+    file_sd_configs:
+      - files:
+          - "/etc/prometheus/file_sd/node.yml"
+  - job_name: "alertmanager"
+    file_sd_configs:
+      - files:
+          - "/etc/prometheus/file_sd/alertmanager.yml"
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - "http://localhost:9100"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115  # Blackbox exporter.
