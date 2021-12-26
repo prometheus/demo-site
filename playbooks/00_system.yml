@@ -1,14 +1,16 @@
 ---
 - name: Install python
   hosts: all
+  become: true
   gather_facts: false
   tasks:
   - name: Install python
-    raw: "apt update && apt install -y python3"
+    raw: "sleep 10 && apt-get update && apt-get install -y python3"
     changed_when: false
 
 - name: Apply security restrictions
   hosts: all
+  become: true
   roles:
   - dev-sec.ssh-hardening
   - dev-sec.os-hardening
@@ -28,6 +30,7 @@
 
 - name: Configure automatic updates
   hosts: all
+  become: true
   roles:
   - jnv.unattended-upgrades
   vars:

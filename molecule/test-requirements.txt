@@ -1,0 +1,12 @@
+ansible>=2.10.0,<3.0.0
+jmespath
+git-lfs
+ansible-lint
+molecule>=3.0.0
+molecule-docker
+docker
+ansible-lint>=3.4.0
+testinfra>=1.7.0
+jmespath
+selinux
+passlib
