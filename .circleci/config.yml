@@ -86,8 +86,6 @@ jobs:
     # Remove encrypted file so ansible won't try to decrypt it
     - run: rm group_vars/grafana/vault
     - setup_remote_docker
-    # - run: |
-    #    ansible-playbook -e "{'grafana_security': {'admin_user': 'admin', admin_password: 'secret' }}" site.yml
     - run: molecule --debug dependency
     - run: molecule --debug lint
     - run: molecule --debug cleanup
@@ -96,6 +94,7 @@ jobs:
     - run: molecule --debug create
     - run: molecule --debug prepare
     - run: molecule --debug converge
+    # TODO
     # - run: molecule --debug idempotence
     - run: molecule --debug verify
     - run: molecule --debug cleanup
