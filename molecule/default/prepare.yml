@@ -1,0 +1,19 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+  - name: install packages
+    package:
+      name: "{{ item }}"
+      state: present
+      update_cache: true
+    with_items:
+      - openssh-server
+      - openssh-client
+  - name: Create dir
+    file:
+      path: "/run/sshd"
+      state: directory
+      mode: 0755

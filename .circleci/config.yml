@@ -81,12 +81,24 @@ jobs:
         at: .
     - run: cp -v go/bin/random playbooks/files/random
     - run: cp -rv rules dashboards playbooks/files/
-    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+    - run: sudo pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
     - run: ansible-galaxy install -f -r roles/requirements.yml
     # Remove encrypted file so ansible won't try to decrypt it
     - run: rm group_vars/grafana/vault
-    - run: |
-        ansible-playbook --check -e "{'grafana_security': {'admin_user': 'admin', admin_password: 'secret' }}" site.yml
+    - setup_remote_docker
+    - run: molecule --debug dependency
+    - run: molecule --debug lint
+    - run: molecule --debug cleanup
+    - run: molecule --debug destroy
+    - run: molecule --debug syntax
+    - run: molecule --debug create
+    - run: molecule --debug prepare
+    - run: molecule --debug converge
+    # TODO
+    # - run: molecule --debug idempotence
+    - run: molecule --debug verify
+    - run: molecule --debug cleanup
+    - run: molecule --debug destroy
 
   deploy:
     executor: python
