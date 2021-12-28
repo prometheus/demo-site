@@ -24,6 +24,7 @@
 
 - name: Setup random exporters
   hosts: all
+  become: true
   tasks:
   - name: Copy random_exporter binary
     copy:
@@ -69,6 +70,7 @@
 
 - name: Add node textfile examples
   hosts: all
+  become: true
   tasks:
     - name: Node CPU threshold
       template:
