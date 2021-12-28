@@ -4,10 +4,10 @@ version: 2.1
 executors:
   python:
     docker:
-      - image: circleci/python:latest
+      - image: cimg/python:3.10
   golang:
     docker:
-      - image: circleci/golang:1.16
+      - image: cimg/go:1.17
 
 jobs:
   lint:
@@ -22,18 +22,18 @@ jobs:
   build:
     executor: golang
     steps:
-      - run: go get -u github.com/prometheus/client_golang/examples/random
-      - run: ls -l /go/bin/random
+      - run: go install github.com/prometheus/client_golang/examples/random@latest
+      - run: ls -l ~/go/bin/random
       - persist_to_workspace:
-          root: /
+          root: /home/circleci
           paths:
             - go/bin
 
   mixins:
     executor: golang
     steps:
-      - run: go get -u github.com/google/go-jsonnet/cmd/jsonnet
-      - run: go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+      - run: go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+      - run: go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
       - run: |
           git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
           cd prometheus
@@ -70,7 +70,7 @@ jobs:
           keys:
             - deps-{{ checksum "requirements.txt" }}
       - run: mkdir -p ~/.cache/pip
-      - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - run: pip install --cache-dir ~/.cache/pip -q -r requirements.txt
       - save_cache:
           key: deps-{{ checksum "requirements.txt" }}
           paths:
@@ -90,7 +90,7 @@ jobs:
           at: .
       - run: cp -v go/bin/random playbooks/files/random
       - run: cp -rv rules dashboards playbooks/files/
-      - run: sudo pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
+      - run: pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
       - run: ansible-galaxy install -f -r roles/requirements.yml
       # Remove encrypted file so ansible won't try to decrypt it
       - run: rm group_vars/grafana/vault
@@ -123,7 +123,7 @@ jobs:
       - restore_cache:
           keys:
             - deps-{{ checksum "requirements.txt" }}
-      - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - run: pip install --cache-dir ~/.cache/pip -q -r requirements.txt
       - deploy:
           name: Deploy to production
           command: ./deploy.sh
