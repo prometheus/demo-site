@@ -10,8 +10,8 @@
       path: "{{ item }}"
       state: directory
     with_items:
-    - /var/www/demo
-    - /var/www/demo/img
+      - /var/www/demo
+      - /var/www/demo/img
   - name: Ensure portal site exists
     copy:
       mode: '0644'

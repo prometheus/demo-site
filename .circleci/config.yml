@@ -4,159 +4,171 @@ version: 2.1
 executors:
   python:
     docker:
-    - image: circleci/python:latest
+      - image: circleci/python:latest
   golang:
     docker:
-    - image: circleci/golang:1.16
+      - image: circleci/golang:1.16
 
 jobs:
+  lint:
+    executor: python
+    steps:
+      - checkout
+      - run: pip install ansible ansible-lint yamllint flake8
+      - run: ansible-galaxy install -r roles/requirements.yml
+      - run: ansible-lint
+      - run: flake8
+
   build:
     executor: golang
     steps:
-    - run: go get -u github.com/prometheus/client_golang/examples/random
-    - run: ls -l /go/bin/random
-    - persist_to_workspace:
-        root: /
-        paths:
-        - go/bin
+      - run: go get -u github.com/prometheus/client_golang/examples/random
+      - run: ls -l /go/bin/random
+      - persist_to_workspace:
+          root: /
+          paths:
+            - go/bin
 
   mixins:
     executor: golang
     steps:
-    - run: go get -u github.com/google/go-jsonnet/cmd/jsonnet
-    - run: go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-    - run: |
-        git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
-        cd prometheus
-        git checkout main -- documentation/prometheus-mixin
-    - run: |
-        cd prometheus/documentation/prometheus-mixin
-        jb install
-        make prometheus_alerts.yaml dashboards_out
-    - run: |
-        git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/node_exporter.git node_exporter
-        cd node_exporter
-        git checkout master -- docs/node-mixin
-    - run: |
-        cd node_exporter/docs/node-mixin
-        jb install
-        make node_alerts.yaml node_rules.yaml dashboards_out
-    - run: |
-        mkdir rules dashboards
-        cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
-        cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
-        # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
-        for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
-    - persist_to_workspace:
-        root: .
-        paths:
-        - rules/
-        - dashboards/
+      - run: go get -u github.com/google/go-jsonnet/cmd/jsonnet
+      - run: go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+      - run: |
+          git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
+          cd prometheus
+          git checkout main -- documentation/prometheus-mixin
+      - run: |
+          cd prometheus/documentation/prometheus-mixin
+          jb install
+          make prometheus_alerts.yaml dashboards_out
+      - run: |
+          git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/node_exporter.git node_exporter
+          cd node_exporter
+          git checkout master -- docs/node-mixin
+      - run: |
+          cd node_exporter/docs/node-mixin
+          jb install
+          make node_alerts.yaml node_rules.yaml dashboards_out
+      - run: |
+          mkdir rules dashboards
+          cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
+          cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
+          # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
+          for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
+      - persist_to_workspace:
+          root: .
+          paths:
+            - rules/
+            - dashboards/
 
   test:
     executor: python
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - deps-{{ checksum "requirements.txt" }}
-    - run: mkdir -p ~/.cache/pip
-    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
-    - save_cache:
-        key: deps-{{ checksum "requirements.txt" }}
-        paths:
-        - ~/.cache/pip
-    - run: ansible-galaxy install -r roles/requirements.yml
-    - run: ansible-playbook --syntax-check site.yml
-    - run: ansible-lint site.yml
-    - store_artifacts:
-        path: test-reports
-        destination: test-reports
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "requirements.txt" }}
+      - run: mkdir -p ~/.cache/pip
+      - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - save_cache:
+          key: deps-{{ checksum "requirements.txt" }}
+          paths:
+            - ~/.cache/pip
+      - run: ansible-galaxy install -r roles/requirements.yml
+      - run: ansible-playbook --syntax-check site.yml
+      - run: ansible-lint site.yml
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
 
   test-deploy:
     executor: python
     steps:
-    - checkout
-    - attach_workspace:
-        at: .
-    - run: cp -v go/bin/random playbooks/files/random
-    - run: cp -rv rules dashboards playbooks/files/
-    - run: sudo pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
-    - run: ansible-galaxy install -f -r roles/requirements.yml
-    # Remove encrypted file so ansible won't try to decrypt it
-    - run: rm group_vars/grafana/vault
-    - setup_remote_docker
-    - run: molecule --debug dependency
-    - run: molecule --debug lint
-    - run: molecule --debug cleanup
-    - run: molecule --debug destroy
-    - run: molecule --debug syntax
-    - run: molecule --debug create
-    - run: molecule --debug prepare
-    - run: molecule --debug converge
-    # TODO
-    # - run: molecule --debug idempotence
-    - run: molecule --debug verify
-    - run: molecule --debug cleanup
-    - run: molecule --debug destroy
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: cp -v go/bin/random playbooks/files/random
+      - run: cp -rv rules dashboards playbooks/files/
+      - run: sudo pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
+      - run: ansible-galaxy install -f -r roles/requirements.yml
+      # Remove encrypted file so ansible won't try to decrypt it
+      - run: rm group_vars/grafana/vault
+      - setup_remote_docker
+      - run: molecule --debug dependency
+      - run: molecule --debug lint
+      - run: molecule --debug cleanup
+      - run: molecule --debug destroy
+      - run: molecule --debug syntax
+      - run: molecule --debug create
+      - run: molecule --debug prepare
+      - run: molecule --debug converge
+      # TODO
+      # - run: molecule --debug idempotence
+      - run: molecule --debug verify
+      - run: molecule --debug cleanup
+      - run: molecule --debug destroy
 
   deploy:
     executor: python
     steps:
-    - checkout
-    - add_ssh_keys:
-        fingerprints:
-        - "46:a1:bb:55:6e:cd:3a:a5:2f:ea:13:46:ae:24:f0:19"
-    - attach_workspace:
-        at: .
-    - run: cp -v go/bin/random playbooks/files/random
-    - run: cp -rv rules dashboards playbooks/files/
-    - restore_cache:
-        keys:
-        - deps-{{ checksum "requirements.txt" }}
-    - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
-    - deploy:
-        name: Deploy to production
-        command: ./deploy.sh
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "46:a1:bb:55:6e:cd:3a:a5:2f:ea:13:46:ae:24:f0:19"
+      - attach_workspace:
+          at: .
+      - run: cp -v go/bin/random playbooks/files/random
+      - run: cp -rv rules dashboards playbooks/files/
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "requirements.txt" }}
+      - run: sudo pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - deploy:
+          name: Deploy to production
+          command: ./deploy.sh
 
 workflows:
   version: 2
   commit:
     jobs:
-    - build
-    - mixins
-    - test
-    - test-deploy:
-        requires:
-        - build
-        - mixins
-        filters:
-          branches:
-            ignore: master
+      - lint
+      - build
+      - mixins
+      - test
+      - test-deploy:
+          requires:
+            - build
+            - mixins
+          filters:
+            branches:
+              ignore: master
 
-    - deploy:
-        requires:
-        - build
-        - test
-        - mixins
-        filters:
-          branches:
-            only: master
+      - deploy:
+          requires:
+            - lint
+            - build
+            - test
+            - mixins
+          filters:
+            branches:
+              only: master
 
   nightly:
     triggers:
-    - schedule:
-        cron: "0 14 * * *"
-        filters:
-          branches:
-            only:
-            - master
+      - schedule:
+          cron: "0 14 * * *"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
-    - build
-    - mixins
-    - test
-    - deploy:
-        requires:
-        - build
-        - test
-        - mixins
+      - lint
+      - build
+      - mixins
+      - test
+      - deploy:
+          requires:
+            - build
+            - test
+            - mixins
