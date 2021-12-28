@@ -17,7 +17,6 @@ jobs:
       - run: pip install ansible ansible-lint yamllint flake8
       - run: ansible-galaxy install -r roles/requirements.yml
       - run: ansible-lint
-      - run: yamllint .
       - run: flake8
 
   build:
