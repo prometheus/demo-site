@@ -4,6 +4,7 @@ port_mapping:
   prometheus: 9090
   alertmanager: 9093
   node: 9100
+  blackbox: 9115
 
 # TODO(paulfantom): reenable when https://github.com/caddy-ansible/caddy-ansible/issues/13 is fixed
 caddy_update: false
