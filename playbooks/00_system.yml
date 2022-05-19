@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
   - name: Install python
-    raw: "sleep 10 && apt-get update && apt-get install -y python3"
+    ansible.builtin.raw: "sleep 10 && apt-get update && apt-get install -y python3"
     changed_when: false
 
 - name: Apply security restrictions
@@ -16,7 +16,7 @@
   - dev-sec.os-hardening
   tasks:
   - name: Set file descriptor limits
-    pam_limits:
+    ansible.builtin.pam_limits:
       dest: '/etc/security/limits.d/20.nofile.conf'
       domain: '*'
       limit_type: "{{ item }}"

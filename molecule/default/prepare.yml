@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
   - name: install packages
-    package:
+    ansible.builtin.package:
       name: "{{ item }}"
       state: present
       update_cache: true
@@ -13,7 +13,7 @@
       - openssh-server
       - openssh-client
   - name: Create dir
-    file:
+    ansible.builtin.file:
       path: "/run/sshd"
       state: directory
       mode: 0755

@@ -27,7 +27,7 @@
   become: true
   tasks:
   - name: Copy random_exporter binary
-    copy:
+    ansible.builtin.copy:
       src: random
       dest: /usr/local/bin/random_exporter
       owner: root
@@ -35,7 +35,7 @@
       mode: 0755
     notify: random_exporter restart
   - name: Copy systemd service file
-    copy:
+    ansible.builtin.copy:
       dest: "/etc/systemd/system/random_exporter@.service"
       mode: 0644
       content: |
@@ -54,14 +54,14 @@
         WantedBy=multi-user.target
     notify: random_exporter restart
   - name: Ensure random_exporters are enabled
-    systemd:
+    ansible.builtin.systemd:
       name: "random_exporter@{{ item }}"
       state: started
       enabled: true
     with_items: "{{ random_exporter_addresses }}"
   handlers:
     - name: random_exporter restart
-      systemd:
+      ansible.builtin.systemd:
         name: "random_exporter@{{ item }}"
         state: restarted
         daemon_reload: true
@@ -73,7 +73,7 @@
   become: true
   tasks:
     - name: Node CPU threshold
-      template:
+      ansible.builtin.template:
         src: node_metrics.prom.j2
         dest: "{{ node_exporter_textfile_dir }}/node_metrics.prom"
         owner: root
