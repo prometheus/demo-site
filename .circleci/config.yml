@@ -84,6 +84,8 @@ jobs:
 
   test-deploy:
     executor: python
+    environment:
+      ANSIBLE_ROLES_PATH: ${PWD}/../roles/
     steps:
       - checkout
       - attach_workspace:
