@@ -86,6 +86,7 @@ jobs:
     executor: python
     environment:
       ANSIBLE_ROLES_PATH: ${PWD}/../roles/
+    resource_class: large
     steps:
       - checkout
       - attach_workspace:
