@@ -1,17 +1,21 @@
 ---
 - name: Deploy node_exporter
   hosts: all
+  collections:
+    - prometheus.prometheus
   roles:
-  - cloudalchemy.node_exporter
+  - prometheus.prometheus.node_exporter
   tags:
   - node_exporter
 
 - name: Setup core monitoring software
   hosts: prometheus
+  collections:
+    - prometheus.prometheus
   roles:
-  - cloudalchemy.blackbox-exporter
-  - cloudalchemy.prometheus
-  - cloudalchemy.alertmanager
+  - prometheus.prometheus.blackbox_exporter
+  - prometheus.prometheus.prometheus
+  - prometheus.prometheus.alertmanager
   tags:
   - prometheus
 

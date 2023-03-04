@@ -11,9 +11,11 @@
 - name: Apply security restrictions
   hosts: all
   become: true
+  collections:
+    - devsec.hardening
   roles:
-  - dev-sec.ssh-hardening
-  - dev-sec.os-hardening
+    - devsec.hardening.os_hardening
+    - devsec.hardening.ssh_hardening
   tasks:
   - name: Set file descriptor limits
     pam_limits:
