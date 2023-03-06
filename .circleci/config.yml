@@ -7,7 +7,7 @@ executors:
       - image: cimg/python:3.10
   golang:
     docker:
-      - image: cimg/go:1.17
+      - image: cimg/go:1.20
 
 jobs:
   lint:
@@ -22,7 +22,10 @@ jobs:
   build:
     executor: golang
     steps:
-      - run: go install github.com/prometheus/client_golang/examples/random@latest
+      - run: wget https://raw.githubusercontent.com/prometheus/client_golang/main/examples/random/main.go
+      - run: go mod init random
+      - run: go mod tidy
+      - run: go build -o ~/go/bin/random main.go
       - run: ls -l ~/go/bin/random
       - persist_to_workspace:
           root: /home/circleci
@@ -54,7 +57,7 @@ jobs:
           mkdir rules dashboards
           cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
           cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
-          # cloudalchemy.ansible-prometheus expects rule files to have `.rules` extension
+          # prometheus ansible role expects rule files to have `.rules` extension
           for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
       - persist_to_workspace:
           root: .
