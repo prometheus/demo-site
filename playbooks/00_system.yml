@@ -4,29 +4,27 @@
   become: true
   gather_facts: false
   tasks:
-  - name: Install python
-    raw: "sleep 10 && apt-get update && apt-get install -y python3"
-    changed_when: false
+    - name: Install python
+      ansible.builtin.raw: "sleep 10 && apt-get update && apt-get install -y python3"
+      changed_when: false
 
 - name: Apply security restrictions
   hosts: all
   become: true
-  collections:
-    - devsec.hardening
   roles:
     - devsec.hardening.os_hardening
     - devsec.hardening.ssh_hardening
   tasks:
-  - name: Set file descriptor limits
-    pam_limits:
-      dest: '/etc/security/limits.d/20.nofile.conf'
-      domain: '*'
-      limit_type: "{{ item }}"
-      limit_item: nofile
-      value: 16384
-    with_items:
-      - soft
-      - hard
+    - name: Set file descriptor limits
+      community.general.pam_limits:
+        dest: '/etc/security/limits.d/20.nofile.conf'
+        domain: '*'
+        limit_type: "{{ item }}"
+        limit_item: nofile
+        value: 16384
+      loop:
+        - soft
+        - hard
   vars:
     ssh_permit_root_login: "without-password"
 
