@@ -1,2 +1,3 @@
 ---
-- import_playbook: ../../site.yml
+- name: Import main playbook
+  import_playbook: ../../site.yml

@@ -2,66 +2,66 @@
 - name: Deploy node_exporter
   hosts: all
   roles:
-  - cloudalchemy.node_exporter
+    - prometheus.prometheus.node_exporter
   tags:
-  - node_exporter
+    - node_exporter
 
 - name: Setup core monitoring software
   hosts: prometheus
   roles:
-  - cloudalchemy.blackbox-exporter
-  - cloudalchemy.prometheus
-  - cloudalchemy.alertmanager
+    - prometheus.prometheus.blackbox_exporter
+    - prometheus.prometheus.prometheus
+    - prometheus.prometheus.alertmanager
   tags:
-  - prometheus
+    - prometheus
 
 - name: Deploy grafana
   hosts: grafana
   roles:
-  - cloudalchemy.grafana
+    - cloudalchemy.grafana
   tags:
-  - grafana
+    - grafana
 
 - name: Setup random exporters
   hosts: all
   become: true
   tasks:
-  - name: Copy random_exporter binary
-    copy:
-      src: random
-      dest: /usr/local/bin/random_exporter
-      owner: root
-      group: root
-      mode: 0755
-    notify: random_exporter restart
-  - name: Copy systemd service file
-    copy:
-      dest: "/etc/systemd/system/random_exporter@.service"
-      mode: 0644
-      content: |
-        # Ansible managed
-        [Unit]
-        Description=Random Metrics Exporter on %i
-        After=network.target
-        [Service]
-        Type=simple
-        User=nobody
-        Group=nogroup
-        ExecStart=/usr/local/bin/random_exporter -listen-address=:%i
-        SyslogIdentifier=random_exporter
-        Restart=always
-        [Install]
-        WantedBy=multi-user.target
-    notify: random_exporter restart
-  - name: Ensure random_exporters are enabled
-    systemd:
-      name: "random_exporter@{{ item }}"
-      state: started
-      enabled: true
-    with_items: "{{ random_exporter_addresses }}"
+    - name: Copy random_exporter binary
+      ansible.builtin.copy:
+        src: random
+        dest: /usr/local/bin/random_exporter
+        owner: root
+        group: root
+        mode: 0755
+      notify: Restart random_exporter
+    - name: Copy systemd service file
+      ansible.builtin.copy:
+        dest: "/etc/systemd/system/random_exporter@.service"
+        mode: 0644
+        content: |
+          # Ansible managed
+          [Unit]
+          Description=Random Metrics Exporter on %i
+          After=network.target
+          [Service]
+          Type=simple
+          User=nobody
+          Group=nogroup
+          ExecStart=/usr/local/bin/random_exporter -listen-address=:%i
+          SyslogIdentifier=random_exporter
+          Restart=always
+          [Install]
+          WantedBy=multi-user.target
+      notify: Restart random_exporter
+    - name: Ensure random_exporters are enabled
+      ansible.builtin.systemd:
+        name: "random_exporter@{{ item }}"
+        state: started
+        enabled: true
+      with_items: "{{ random_exporter_addresses }}"
   handlers:
-    - name: random_exporter restart
-      systemd:
+    - name: Restart random_exporter
+      ansible.builtin.systemd:
         name: "random_exporter@{{ item }}"
         state: restarted
         daemon_reload: true
@@ -73,7 +73,7 @@
   become: true
   tasks:
     - name: Node CPU threshold
-      template:
+      ansible.builtin.template:
         src: node_metrics.prom.j2
         dest: "{{ node_exporter_textfile_dir }}/node_metrics.prom"
         owner: root
