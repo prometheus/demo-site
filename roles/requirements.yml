@@ -7,10 +7,11 @@ collections:
   type: galaxy
 - name: devsec.hardening
   type: galaxy
+- name: grafana.grafana
+  type: galaxy
+  version: ">=2.2.0"
 
 roles:
-- name: cloudalchemy.grafana
-
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
 - name: hifis.unattended_upgrades
