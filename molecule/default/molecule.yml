@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: bionic
+  - name: ubuntu-22.04
     pre_build_image: true
-    image: quay.io/paulfantom/molecule-systemd:ubuntu-18.04
+    image: dokken/ubuntu-22.04
     docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
     groups:
       - python3
