@@ -5,19 +5,44 @@ port_mapping:
   alertmanager: 9093
   node: 9100
 
-# TODO(paulfantom): reenable when https://github.com/caddy-ansible/caddy-ansible/issues/13 is fixed
-caddy_update: false
+# # TODO(paulfantom): reenable when https://github.com/caddy-ansible/caddy-ansible/issues/13 is fixed
+# caddy_update: false
+# 
+# caddy_systemd_capabilities_enabled: true
+# caddy_systemd_restart_startlimitinterval: 3600
+# caddy_config: |
+#   {{ ansible_host }} {
+#     try_files {path}.html {path}
+#     root * /var/www/demo/
+#     file_server
+#   }
+#   {# for name, port in port_mapping.items() %}
+#   {{ name }}.{{ ansible_host }} {
+#     reverse_proxy 127.0.0.1:{{ port }}
+#   }
+#   {% endfor #}
 
-caddy_systemd_capabilities_enabled: true
-caddy_systemd_restart_startlimitinterval: 3600
-caddy_config: |
-  {{ ansible_host }} {
-    try_files {path}.html {path}
-    root * /var/www/demo/
-    file_server
-  }
-  {% for name, port in port_mapping.items() %}
-  {{ name }}.{{ ansible_host }} {
-    reverse_proxy 127.0.0.1:{{ port }}
-  }
-  {% endfor %}
+caddy_json_config:
+  apps:
+    http:
+      servers:
+        demo:
+          listen:
+            - ":80"
+            - ":443"
+          routes:
+            - match:
+                - host:
+                    - "{{ ansible_host }}"
+              handle:
+                - handler: "static_response"
+                  body: "{{ lookup('ansible.builtin.file', 'index.html') }}"
+{% for name, port in port_mapping.items() %}
+              - match:
+                - host:
+                    - "{{ name }}.{{ ansible_host }}"
+              handle:
+                - handler: "reverse_proxy"
+                  upstreams:
+                    - dial: "127.0.0.1:{{ port }}"
+{% endfor %}
