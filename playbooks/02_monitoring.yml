@@ -18,7 +18,7 @@
 - name: Deploy grafana
   hosts: grafana
   roles:
-    - cloudalchemy.grafana
+    - grafana.grafana.grafana
   tags:
     - grafana
 
