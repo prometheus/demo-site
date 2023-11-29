@@ -7,11 +7,11 @@ collections:
   type: galaxy
 - name: devsec.hardening
   type: galaxy
+- name: maxhoesel.caddy
 
 roles:
 - name: cloudalchemy.grafana
 
 # EXTRAS
-- name: caddy_ansible.caddy_ansible
 - name: jnv.unattended-upgrades
   version: v1.7.1
