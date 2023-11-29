@@ -13,5 +13,5 @@ roles:
 
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
-- name: jnv.unattended-upgrades
-  version: v1.7.1
+- name: hifis.unattended_upgrades
+  version: "v3.2.0"

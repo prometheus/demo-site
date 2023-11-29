@@ -28,5 +28,7 @@ provisioner:
     links:
       group_vars: ../../group_vars/
       host_vars: host_vars/
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
 verifier:
   name: testinfra
