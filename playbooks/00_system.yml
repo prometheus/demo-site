@@ -32,7 +32,7 @@
   hosts: all
   become: true
   roles:
-    - jnv.unattended-upgrades
+    - hifis.unattended_upgrades
   vars:
     unattended_automatic_reboot_time: "02:00"
     unattended_update_days: 1
