@@ -1,11 +1,5 @@
 ---
 extends: default
-ignore: |
-  secrets.yml
-  *.sh
-  *.md
-  roles/cloudalchemy.*
-  roles/mongrelion.docker
 
 rules:
   braces:
@@ -13,15 +7,22 @@ rules:
     level: error
   brackets:
     max-spaces-inside: 1
-  comments:
     level: error
-  document-start:
-    level: error
+  commas: disable
+  comments: disable
+  comments-indentation: disable
+  document-start: disable
   indentation:
-    spaces: 2
-    indent-sequences: false
-  line-length:
-    max: 160
-    level: error
+    spaces: consistent
+    indent-sequences: consistent
+  key-duplicates:
+    ignore: |
+      config/testdata/section_key_dup.bad.yml
+  line-length: disable
   truthy:
-    level: error
+    ignore: |
+      .github/workflows/codeql-analysis.yml
+      .github/workflows/funcbench.yml
+      .github/workflows/fuzzing.yml
+      .github/workflows/prombench.yml
+      .github/workflows/golangci-lint.yml

@@ -9,9 +9,9 @@ grafana_auth:
     org_role: Viewer
 
 grafana_datasources:
-- name: "Prometheus"
-  type: "prometheus"
-  access: "proxy"
-  url: "http://{{ ansible_host }}:9090"
-  isDefault: true
+  - name: "Prometheus"
+    type: "prometheus"
+    access: "proxy"
+    url: "http://{{ ansible_host }}:9090"
+    isDefault: true
 grafana_dashboards: []

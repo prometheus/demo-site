@@ -7,7 +7,7 @@
 ## [demo.do.prometheus.io](https://demo.do.prometheus.io)
 
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
-Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
+Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://app.circleci.com/pipelines/github/prometheus/demo-site).
 
 Have a look at configuration files in [group_vars/](group_vars).
 
@@ -24,11 +24,11 @@ All applications should be running on their default ports.
 
 ## Important notice
 
-Before running, golang is required to be installed on deployer machine (neccessary to install random_exporter).
+Before running, golang is required to be installed on deployer machine (necessary to install random_exporter).
 
 Most services can be accessed in two ways (links in [Applications](#Applications) section. As an example, prometheus can be accessed via:
   - **http**://demo.do.prometheus.io:9090 - default way
-  - **https**://prometheus.do.prometheus.io - workaround which in backgroud communicates with prometheus via insecure, "default" channel mentioned above
+  - **https**://prometheus.do.prometheus.io - workaround which in background communicates with prometheus via insecure, "default" channel mentioned above
 
 This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13).
 
@@ -53,6 +53,17 @@ For security measures we encrypted some of our passwords, but it is easy to use 
 
 ```
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
+```
+
+#### Download the 'random' exporter binary
+
+You will have to manually run `go` command to download & copy the [`random`](https://github.com/prometheus/client_golang/tree/master/examples/random) exporter binary to [`playbooks/files`](playbooks/files) directory.
+
+- The binary will be downloaded at `GOPATH` location. The value of `GOPATH` can be found by running `go env|grep GOPATH` command on your system.
+
+```
+go get -u github.com/prometheus/client_golang/examples/random
+cp <GOPATH>/bin/random /path/to/demo-site/playbooks/files/
 ```
 
 #### Run as usual Ansible playbook

@@ -1,0 +1,5 @@
+---
+# You may consider setting this to "inventory_hostname" if you have not defined "ansible_host" in the hosts file.
+prometheus_hostnamelookupkey: "ansible_host"
+
+os_minimize_access_enabled: false

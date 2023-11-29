@@ -1,25 +1,23 @@
 ---
-letsencrypt_email: prometheus-team@googlegroups.com
 port_mapping:
   grafana: 3000
   prometheus: 9090
   alertmanager: 9093
   node: 9100
 
-caddy_update: true
+# TODO(paulfantom): reenable when https://github.com/caddy-ansible/caddy-ansible/issues/13 is fixed
+caddy_update: false
+
 caddy_systemd_capabilities_enabled: true
 caddy_systemd_restart_startlimitinterval: 3600
-caddy_features: http.prometheus
 caddy_config: |
   {{ ansible_host }} {
-    ext .html
-    root /var/www/demo/
-    prometheus
-    tls {{ letsencrypt_email }}
+    try_files {path}.html {path}
+    root * /var/www/demo/
+    file_server
   }
   {% for name, port in port_mapping.items() %}
   {{ name }}.{{ ansible_host }} {
-    proxy / 127.0.0.1:{{ port }}
-    tls {{ letsencrypt_email }}
+    reverse_proxy 127.0.0.1:{{ port }}
   }
   {% endfor %}

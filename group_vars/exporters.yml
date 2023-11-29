@@ -1,2 +1,8 @@
 ---
 blackbox_exporter_web_listen_address: "127.0.0.1:9115"
+
+node_exporter_textfile_dir: "/var/lib/node_exporter"
+
+node_cpu_utilization_thresholds:
+  critical: 99
+  warning: 95
