@@ -28,6 +28,21 @@
   vars:
     ssh_permit_root_login: "without-password"
 
+- name: Configure systemd
+  hosts: all
+  become: true
+  tasks:
+    - name: Enbale CPU accounting
+      ansible.builtin.lineinfile:
+        path: /etc/systemd/system.conf
+        regexp: '^DefaultCPUAccounting=.*$'
+        line: 'DefaultCPUAccounting=yes'
+      notify: Reload systemd
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
 - name: Configure automatic updates
   hosts: all
   become: true
