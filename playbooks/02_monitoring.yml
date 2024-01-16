@@ -1,10 +1,11 @@
 ---
-- name: Deploy node_exporter
+- name: Deploy common exporters
   hosts: all
   roles:
     - prometheus.prometheus.node_exporter
+    - prometheus.prometheus.cadvisor
   tags:
-    - node_exporter
+    - exporters
 
 - name: Setup core monitoring software
   hosts: prometheus
