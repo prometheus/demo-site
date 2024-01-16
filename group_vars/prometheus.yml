@@ -100,7 +100,7 @@ prometheus_scrape_configs:
       - files:
           - "/etc/prometheus/file_sd/alertmanager.yml"
   - job_name: 'cadvisor'
-    track_timestamps_staleness: 'true'
+    track_timestamps_staleness: true
     file_sd_configs:
       - files:
           - "/etc/prometheus/file_sd/cadvisor.yml"
