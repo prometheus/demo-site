@@ -58,6 +58,11 @@ prometheus_targets:
         "{{ groups['all'] | map('extract', hostvars, [prometheus_hostnamelookupkey]) | map('regex_replace', '$', ':9100') | list }}"
       labels:
         env: demo
+  cadvisor:
+    - targets:
+        "{{ groups['all'] | map('extract', hostvars, [prometheus_hostnamelookupkey]) | map('regex_replace', '$', ':8080') | list }}"
+      labels:
+        env: demo
   alertmanager:
     - targets:
         - "{{ ansible_host | default(inventory_hostname) }}:9093"
@@ -94,6 +99,11 @@ prometheus_scrape_configs:
     file_sd_configs:
       - files:
           - "/etc/prometheus/file_sd/alertmanager.yml"
+  - job_name: 'cadvisor'
+    track_timestamps_staleness: 'true'
+    file_sd_configs:
+      - files:
+          - "/etc/prometheus/file_sd/cadvisor.yml"
   - job_name: 'blackbox'
     metrics_path: /probe
     params:
