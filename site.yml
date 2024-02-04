@@ -3,9 +3,10 @@
   import_playbook: playbooks/00_system.yml
   tags:
     - system
-#- import_playbook: playbooks/01_webserver.yml
-#  tags:
-#  - webserver
+- name: Install webserver
+  import_playbook: playbooks/01_webserver.yml
+  tags:
+    - webserver
 - name: Install monitoring system
   import_playbook: playbooks/02_monitoring.yml
   tags:

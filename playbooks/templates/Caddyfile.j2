@@ -1,0 +1,16 @@
+{{ ansible_managed | comment }}
+{
+  servers {
+    metrics
+  }
+}
+{{ ansible_host }} {
+  try_files {path}.html {path}
+  root * /var/www/demo/
+  file_server
+}
+{% for name, port in port_mapping.items() %}
+{{ name }}.{{ ansible_host }} {
+  reverse_proxy 127.0.0.1:{{ port }}
+}
+{% endfor %}
