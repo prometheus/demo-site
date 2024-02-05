@@ -4,6 +4,7 @@ port_mapping:
   prometheus: 9090
   alertmanager: 9093
   node: 9100
+  blackbox: 9115
 
 caddy_update: true
 
