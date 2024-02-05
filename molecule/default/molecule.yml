@@ -19,6 +19,8 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /var/lib/docker
     privileged: true
+    cgroup_parent: docker.slice
+    command: /lib/systemd/systemd
 provisioner:
   name: ansible
   playbooks:
