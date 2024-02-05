@@ -8,6 +8,9 @@ grafana_auth:
     org_name: "Main Org."
     org_role: Viewer
 
+grafana_metrics:
+  enabled: true
+
 grafana_datasources:
   - name: "Prometheus"
     type: "prometheus"
