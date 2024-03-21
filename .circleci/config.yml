@@ -8,6 +8,10 @@ executors:
   golang:
     docker:
       - image: cimg/go:1.20
+  vm:
+    machine:
+      image: ubuntu-2204:current
+      docker_layer_caching: true
 
 jobs:
   lint:
@@ -86,18 +90,17 @@ jobs:
           destination: test-reports
 
   test-deploy:
-    executor: python
+    executor: vm
     steps:
       - checkout
       - attach_workspace:
           at: .
       - run: cp -v go/bin/random playbooks/files/random
       - run: cp -rv rules dashboards playbooks/files/
-      - run: pip install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
+      - run: pip3 install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
       - run: ansible-galaxy install -f -r roles/requirements.yml
       # Remove encrypted file so ansible won't try to decrypt it
       - run: rm group_vars/grafana/vault
-      - setup_remote_docker
       - run: molecule --debug dependency
       - run: molecule --debug cleanup
       - run: molecule --debug destroy
