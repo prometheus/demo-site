@@ -17,4 +17,7 @@ grafana_datasources:
     access: "proxy"
     url: "http://{{ ansible_host }}:9090"
     isDefault: true
+
 grafana_dashboards: []
+
+grafana_alerting: {}

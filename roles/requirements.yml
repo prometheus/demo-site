@@ -9,7 +9,7 @@ collections:
   type: galaxy
 - name: grafana.grafana
   type: galaxy
-  version: ">=2.2.0"
+  version: ">=5.2.0"
 
 roles:
 # EXTRAS
