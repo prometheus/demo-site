@@ -1,4 +1,4 @@
 ---
 prometheus_hostnamelookupkey: 'inventory_hostname'
-grafana_security: {'admin_user': 'admin', admin_password: 'secret'}
+grafana_security: {'admin_user': 'admin', 'admin_password': 'secret'}
 ssh_server_hardening: false

@@ -6,12 +6,12 @@
   tasks:
     - name: Install packages
       ansible.builtin.package:
-        name: "{{ item }}"
+        name:
+          - openssh-server
+          - openssh-client
         state: present
         update_cache: true
-      with_items:
-        - openssh-server
-        - openssh-client
+
     - name: Create dir
       ansible.builtin.file:
         path: "/run/sshd"
