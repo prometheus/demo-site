@@ -7,7 +7,6 @@ platforms:
   - name: ubuntu-22.04
     pre_build_image: true
     image: dokken/ubuntu-22.04
-    docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
     groups:
       - python3
       - prometheus
@@ -15,9 +14,6 @@ platforms:
       - grafana
       - exporters
       - web
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - /var/lib/docker
     privileged: true
     cgroup_parent: docker.slice
     command: /lib/systemd/systemd
