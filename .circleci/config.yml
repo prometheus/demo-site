@@ -18,7 +18,7 @@ jobs:
     executor: python
     steps:
       - checkout
-      - run: pip install ansible ansible-lint yamllint flake8
+      - run: pip install -U ansible ansible-lint yamllint flake8
       - run: ansible-galaxy install -r roles/requirements.yml
       - run: ansible-lint
       - run: flake8
@@ -77,7 +77,7 @@ jobs:
           keys:
             - deps-{{ checksum "requirements.txt" }}
       - run: mkdir -p ~/.cache/pip
-      - run: pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - run: pip install -U --cache-dir ~/.cache/pip -q -r requirements.txt
       - save_cache:
           key: deps-{{ checksum "requirements.txt" }}
           paths:
@@ -97,7 +97,7 @@ jobs:
           at: .
       - run: cp -v go/bin/random playbooks/files/random
       - run: cp -rv rules dashboards playbooks/files/
-      - run: pip3 install --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
+      - run: pip3 install -U --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
       - run: ansible-galaxy install -f -r roles/requirements.yml
       # Remove encrypted file so ansible won't try to decrypt it
       - run: rm group_vars/grafana/vault
@@ -128,7 +128,7 @@ jobs:
       - restore_cache:
           keys:
             - deps-{{ checksum "requirements.txt" }}
-      - run: pip install --cache-dir ~/.cache/pip -q -r requirements.txt
+      - run: pip install -U --cache-dir ~/.cache/pip -q -r requirements.txt
       - deploy:
           name: Deploy to production
           command: ./deploy.sh
