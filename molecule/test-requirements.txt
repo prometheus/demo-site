@@ -5,7 +5,8 @@ git-lfs
 jmespath
 jmespath
 molecule>=24.2.1
-molecule[docker]
+molecule-plugins[containers]
+molecule-plugins[docker]
 passlib
 pytest-testinfra
 selinux
