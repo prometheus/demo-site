@@ -20,7 +20,8 @@ prometheus_alertmanager_config:
           - "{{ ansible_host | default(inventory_hostname) }}:9093"
 
 prometheus_alert_rules_files:
-  - rules/*.rules
+  - rules/*.yaml
+  - rules/*.yml
 
 prometheus_alert_rules:
   - alert: Watchdog

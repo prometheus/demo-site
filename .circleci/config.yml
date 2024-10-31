@@ -61,8 +61,6 @@ jobs:
           mkdir rules dashboards
           cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
           cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
-          # prometheus ansible role expects rule files to have `.rules` extension
-          for i in rules/*.yaml; do mv -v $i ${i%yaml}rules; done
       - persist_to_workspace:
           root: .
           paths:
