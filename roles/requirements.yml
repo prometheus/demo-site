@@ -17,6 +17,6 @@ collections:
 roles:
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
-  version: 3.2.0
+  version: "v3.2.0"
 - name: hifis.unattended_upgrades
   version: "v3.2.0"
