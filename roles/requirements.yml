@@ -3,16 +3,20 @@ collections:
 # With just the collection name
 - name: community.general
   type: galaxy
+  version: 9.5.0
 - name: prometheus.prometheus
   type: galaxy
+  version: 0.21.0
 - name: devsec.hardening
   type: galaxy
+  version: 10.1.0
 - name: grafana.grafana
   type: galaxy
-  version: ">=5.2.0"
+  version: 5.6.0
 
 roles:
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
+  version: "v3.2.0"
 - name: hifis.unattended_upgrades
   version: "v3.2.0"
