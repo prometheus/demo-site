@@ -4,7 +4,7 @@ version: 2.1
 executors:
   python:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.13
   golang:
     docker:
       - image: cimg/go:1.20
