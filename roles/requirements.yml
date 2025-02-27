@@ -9,7 +9,7 @@ collections:
   version: 0.25.0
 - name: devsec.hardening
   type: galaxy
-  version: 10.2.0
+  version: 10.3.0
 - name: grafana.grafana
   type: galaxy
   version: 5.6.0
