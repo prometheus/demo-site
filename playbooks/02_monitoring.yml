@@ -48,7 +48,7 @@
           Type=simple
           User=nobody
           Group=nogroup
-          ExecStart=/usr/local/bin/random_exporter -listen-address=:%i
+          ExecStart=/usr/local/bin/random_exporter -listen-address=%i
           SyslogIdentifier=random_exporter
           Restart=always
           [Install]

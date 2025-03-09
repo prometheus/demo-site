@@ -17,8 +17,3 @@
         mode: '0644'
         src: index.html
         dest: /var/www/demo/index.html
-    - name: Copy digitalocean image
-      ansible.builtin.get_url:
-        url: "https://github.com/prometheus/demo-site/raw/prometheus/playbooks/files/img/digitalocean.png"
-        dest: "/var/www/demo/img/digitalocean.png"
-        mode: 0644
