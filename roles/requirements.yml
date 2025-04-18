@@ -6,7 +6,7 @@ collections:
   version: 10.5.0
 - name: prometheus.prometheus
   type: galaxy
-  version: 0.26.1
+  version: 0.26.2
 - name: devsec.hardening
   type: galaxy
   version: 10.3.0
