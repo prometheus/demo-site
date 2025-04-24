@@ -10,8 +10,8 @@ prometheus_storage_retention: "31d"
 
 prometheus_config_flags_extra:
   enable-feature:
-    - promql-at-modifier
-    - promql-negative-offset
+    - extra-scrape-metrics
+    - promql-per-step-stats
 
 prometheus_alertmanager_config:
   - scheme: http
