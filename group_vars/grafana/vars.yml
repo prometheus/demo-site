@@ -1,23 +1,20 @@
 ---
-grafana_security:
-  admin_user: admin
-  admin_password: "{{ vault_grafana_password }}"
+grafana_ini:
+  security:
+    admin_user: admin
+    admin_password: "{{ vault_grafana_password }}"
 
-grafana_auth:
-  anonymous:
-    org_name: "Main Org."
-    org_role: Viewer
+  auth:
+    anonymous:
+      org_name: "Main Org."
+      org_role: Viewer
 
-grafana_metrics:
-  enabled: true
+  metrics:
+    enabled: true
 
-grafana_datasources:
-  - name: "Prometheus"
-    type: "prometheus"
-    access: "proxy"
-    url: "http://{{ ansible_host }}:9090"
-    isDefault: true
-
-grafana_dashboards: []
-
-grafana_alerting: {}
+  datasources:
+    - name: "Prometheus"
+      type: "prometheus"
+      access: "proxy"
+      url: "http://{{ ansible_host }}:9090"
+      isDefault: true
