@@ -12,9 +12,11 @@ grafana_ini:
   metrics:
     enabled: true
 
-  datasources:
-    - name: "Prometheus"
-      type: "prometheus"
-      access: "proxy"
-      url: "http://{{ ansible_host }}:9090"
-      isDefault: true
+grafana_datasources:
+  - name: "Prometheus"
+    type: "prometheus"
+    access: "proxy"
+    url: "http://{{ ansible_host | default(inventory_hostname) }}:9090"
+    isDefault: true
+
+grafana_dashboards: []
