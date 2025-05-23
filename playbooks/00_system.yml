@@ -47,7 +47,11 @@
   hosts: all
   become: true
   roles:
-    - hifis.unattended_upgrades
+    - hifis.toolkit.unattended_upgrades
   vars:
+    unattended_automatic_reboot: true
     unattended_automatic_reboot_time: "02:00"
-    unattended_update_days: 1
+    unattended_origins_patterns:
+      - 'origin=Debian,codename=${distro_codename},label=Debian-Security' # security updates
+      - 'o=Debian,codename=${distro_codename},label=Debian' # updates including non-security updates
+    unattended_syslog_enable: true

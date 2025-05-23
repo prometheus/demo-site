@@ -13,10 +13,11 @@ collections:
 - name: grafana.grafana
   type: galaxy
   version: 6.0.1
+- name: hifis.toolkit
+  type: galaxy
+  version: 5.3.0
 
 roles:
 # EXTRAS
 - name: caddy_ansible.caddy_ansible
   version: "v3.2.0"
-- name: hifis.unattended_upgrades
-  version: "v3.2.1"
