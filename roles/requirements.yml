@@ -3,7 +3,7 @@ collections:
 # With just the collection name
 - name: community.general
   type: galaxy
-  version: 11.3.0
+  version: 12.1.0
 - name: prometheus.prometheus
   type: galaxy
   version: 0.27.4
