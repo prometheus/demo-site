@@ -7,7 +7,7 @@ executors:
       - image: cimg/python:3.14
   golang:
     docker:
-      - image: cimg/go:1.25
+      - image: cimg/go:1.26
   vm:
     machine:
       image: ubuntu-2204:current
