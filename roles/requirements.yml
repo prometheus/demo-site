@@ -15,7 +15,7 @@ collections:
   version: 6.1.0
 - name: hifis.toolkit
   type: galaxy
-  version: 6.3.2
+  version: 7.0.1
 
 roles:
 # EXTRAS
