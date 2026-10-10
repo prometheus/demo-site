@@ -1,13 +1,13 @@
 # Prometheus monitoring demo site
 
-[![Build Status](https://circleci.com/gh/prometheus/demo-site.svg?style=svg)](https://circleci.com/gh/prometheus/demo-site)
+[![CI](https://github.com/prometheus/demo-site/actions/workflows/ci.yml/badge.svg)](https://github.com/prometheus/demo-site/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%20License-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
 [![IRC](https://img.shields.io/badge/chat-on%20freenode-blue.svg)](http://webchat.freenode.net/?channels=prometheus)
 
 ## [demo.prometheus.io](https://demo.prometheus.io)
 
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
-Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://app.circleci.com/pipelines/github/prometheus/demo-site).
+Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with GitHub Actions. If you want to check `ansible-playbook` output, go to [workflow runs](https://github.com/prometheus/demo-site/actions/workflows/deploy.yml).
 
 Have a look at configuration files in [group_vars/](group_vars).
 
