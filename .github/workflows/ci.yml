@@ -1,0 +1,183 @@
+---
+name: CI
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        with:
+          python-version: "3.14"
+          cache: pip
+      - name: Install lint dependencies
+        run: python -m pip install -U ansible ansible-lint yamllint flake8
+      - name: Install Ansible Galaxy dependencies
+        run: ansible-galaxy install -r roles/requirements.yml
+      - name: Run ansible-lint
+        run: ansible-lint
+      - name: Run flake8
+        run: flake8
+
+  build:
+    name: Build random exporter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+        with:
+          go-version: "1.26.x"
+      - name: Build random exporter
+        run: |
+          mkdir -p go/bin
+          workdir="$(mktemp -d)"
+          wget -O "${workdir}/main.go" https://raw.githubusercontent.com/prometheus/client_golang/main/examples/random/main.go
+          cd "${workdir}"
+          go mod init random
+          go mod tidy
+          go build -o "${GITHUB_WORKSPACE}/go/bin/random" main.go
+          ls -l "${GITHUB_WORKSPACE}/go/bin/random"
+      - name: Upload random exporter
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: random-exporter
+          path: go/bin/random
+          if-no-files-found: error
+
+  mixins:
+    name: Generate mixins
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+        with:
+          go-version: "1.26.x"
+      - name: Install Jsonnet tooling
+        run: |
+          go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+          go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+      - name: Generate Prometheus mixin
+        run: |
+          git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/prometheus.git prometheus
+          cd prometheus
+          git checkout main -- documentation/prometheus-mixin
+          cd documentation/prometheus-mixin
+          jb install
+          make prometheus_alerts.yaml dashboards_out
+      - name: Generate node_exporter mixin
+        run: |
+          git clone --depth 1 --no-checkout --filter=blob:none https://github.com/prometheus/node_exporter.git node_exporter
+          cd node_exporter
+          git checkout master -- docs/node-mixin
+          cd docs/node-mixin
+          jb install
+          make node_alerts.yaml node_rules.yaml dashboards_out
+      - name: Collect mixin outputs
+        run: |
+          mkdir rules dashboards
+          cp -v prometheus/documentation/prometheus-mixin/dashboards_out/*.json node_exporter/docs/node-mixin/dashboards_out/*.json dashboards/
+          cp -v prometheus/documentation/prometheus-mixin/*.yaml node_exporter/docs/node-mixin/*.yaml rules/
+      - name: Upload mixin outputs
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: mixins
+          path: |
+            rules/
+            dashboards/
+          if-no-files-found: error
+
+  test:
+    name: Test Ansible playbook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install test dependencies
+        run: python -m pip install -U --cache-dir ~/.cache/pip -q -r requirements.txt
+      - name: Install Ansible Galaxy dependencies
+        run: ansible-galaxy install -r roles/requirements.yml
+      - name: Run Ansible syntax check
+        run: ansible-playbook --syntax-check site.yml
+      - name: Run ansible-lint on site.yml
+        run: ansible-lint site.yml
+
+  test-deploy:
+    name: Test deploy with Molecule
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - mixins
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - name: Download random exporter
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          name: random-exporter
+          path: artifacts/random-exporter
+      - name: Download mixin outputs
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          name: mixins
+          path: artifacts/mixins
+      - name: Stage generated files
+        run: |
+          cp -v artifacts/random-exporter/random playbooks/files/random
+          cp -rv artifacts/mixins/rules artifacts/mixins/dashboards playbooks/files/
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: molecule/test-requirements.txt
+      - name: Install Molecule dependencies
+        run: python -m pip install -U --cache-dir ~/.cache/pip -q -r molecule/test-requirements.txt
+      - name: Install Ansible Galaxy dependencies
+        run: ansible-galaxy install -f -r roles/requirements.yml
+      - name: Remove encrypted Grafana vault file
+        run: rm group_vars/grafana/vault
+      - name: Run Molecule dependency
+        run: molecule --debug dependency
+      - name: Run Molecule cleanup
+        run: molecule --debug cleanup
+      - name: Run Molecule destroy
+        run: molecule --debug destroy
+      - name: Run Molecule syntax
+        run: molecule --debug syntax
+      - name: Run Molecule create
+        run: molecule --debug create
+      - name: Run Molecule prepare
+        run: molecule --debug prepare
+      - name: Run Molecule converge
+        run: molecule --debug converge
+      - name: Run Molecule verify
+        run: molecule --debug verify
+      - name: Run Molecule final cleanup
+        if: always()
+        run: molecule --debug cleanup
+      - name: Run Molecule final destroy
+        if: always()
+        run: molecule --debug destroy
