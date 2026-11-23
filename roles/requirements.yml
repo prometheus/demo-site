@@ -12,7 +12,7 @@ collections:
   version: 10.6.0
 - name: grafana.grafana
   type: galaxy
-  version: 6.1.0
+  version: 6.2.0
 - name: hifis.toolkit
   type: galaxy
   version: 6.3.2
